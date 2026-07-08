@@ -1,0 +1,59 @@
+<div class="dashboard-grid">
+  
+  <div class="card chart-card">
+    <h3>Historique des Traitements</h3>
+    <div class="chart-wrapper">
+      <canvas baseChart [data]="barChartData" [options]="barChartOptions" [type]="barChartType"></canvas>
+    </div>
+  </div>
+
+  <div class="card chart-card">
+    <h3>Suivi des Rejets par Flux</h3>
+    <div class="filters">
+      <label *ngFor="let flux of availableFluxTypes" class="checkbox-label">
+        <input type="checkbox" [(ngModel)]="selectedFluxTypes[flux]" (change)="onFilterChange()" />
+        {{ flux }}
+      </label>
+    </div>
+    <div class="chart-wrapper pie-wrapper">
+      <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" [type]="pieChartType"></canvas>
+    </div>
+  </div>
+
+  <div class="card table-card">
+    <h3>Tableau de Suivi Macro</h3>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Application</th>
+            <th>Flux</th>
+            <th>Reçus</th>
+            <th>Traités</th>
+            <th>Rejetés</th>
+            <th>Statut</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of treatments">
+            <td>{{ t.dateTraitement | date:'short' }}</td>
+            <td>{{ t.nomApplication }}</td>
+            <td><span class="tag">{{ t.typeFlux }}</span></td>
+            <td>{{ t.nbCreRecus }}</td>
+            <td class="success-text">{{ t.nbCreTraites }}</td>
+            <td [class.error-text]="t.nbCreRejetes > 0">{{ t.nbCreRejetes }}</td>
+            <td>
+              <span class="status-badge" [ngClass]="{
+                'status-success': t.statut === 'Traité complètement',
+                'status-warning': t.statut === 'Rejeté partiellement',
+                'status-error': t.statut === 'Rejeté complètement'
+              }">{{ t.statut }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,33 @@
+<div class="login-wrapper">
+  <div class="login-glass-card">
+    <div class="login-header">
+      <img src="assets/barid-bank-logo.png" alt="Barid Bank" class="bank-logo" />
+      <h2>XRDJ-IRIS Login</h2>
+      <p>Enter your credentials to continue.</p>
+    </div>
+
+    <div class="error-banner" *ngIf="errorMsg">
+      {{ errorMsg }}
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="input-group">
+        <label for="username">Username</label>
+        <input id="username" type="text" formControlName="username" placeholder="admin or user" autocomplete="off" />
+      </div>
+
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input id="password" type="password" formControlName="password" placeholder="••••••••" />
+      </div>
+
+      <button type="submit" [disabled]="loginForm.invalid || loading" class="btn-login">
+        {{ loading ? 'Authenticating...' : 'Sign In' }}
+      </button>
+    </form>
+
+    <div class="hint">
+      <small>Admin: admin / admin123 | User: user / user123</small>
+    </div>
+  </div>
+</div>

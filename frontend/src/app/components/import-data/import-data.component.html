@@ -1,0 +1,47 @@
+<div class="import-container">
+  <div class="header-section">
+    <h3>Data Ingestion & Management</h3>
+    <p>Manage the `.seq` file pipelines and clear the rejection queues.</p>
+  </div>
+
+  <div class="alert success" *ngIf="successMsg">
+    {{ successMsg }}
+  </div>
+
+  <div class="health-cards" *ngIf="health">
+    <div class="health-card">
+      <div class="info">
+        <span>Active Engines</span>
+        <h4>{{ health.activeEngines }}</h4>
+      </div>
+    </div>
+    <div class="health-card">
+      <div class="info">
+        <span>Queue Count</span>
+        <h4>{{ health.queueCount }}</h4>
+      </div>
+    </div>
+    <div class="health-card">
+      <div class="info">
+        <span>Total Errors</span>
+        <h4>{{ health.totalErrorsToday }}</h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="action-panel">
+    <div class="action-card">
+      <h4>Trigger Manual Ingestion</h4>
+      <p>Simulate reading and parsing a pending `.seq` file.</p>
+      <button class="btn btn-primary" (click)="triggerIngestion()" [disabled]="loading">
+        {{ loading ? 'Processing...' : 'Run Ingestion' }}
+      </button>
+    </div>
+
+    <div class="action-card">
+      <h4>Purge Rejections</h4>
+      <p>Clear completely rejected items from the cache.</p>
+      <button class="btn btn-danger" (click)="purgeCache()">Purge Cache</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,40 @@
+<div class="layout-container">
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="assets/barid-bank-logo.png" alt="Barid Bank" class="sidebar-logo" />
+      <h2>XRDJ-IRIS</h2>
+    </div>
+
+    <nav class="nav-menu">
+      <a routerLink="/app/visualize" routerLinkActive="active" class="nav-item">
+        <span class="icon">📊</span>
+        <span>Dashboard</span>
+      </a>
+
+      <!-- Admin only nav item -->
+      <a *ngIf="authService.getRole() === 'ROLE_ADMIN'" routerLink="/app/import" routerLinkActive="active"
+        class="nav-item">
+        <span class="icon">📥</span>
+        <span>Import Data</span>
+      </a>
+    </nav>
+
+    <div class="user-profile">
+      <div class="user-info">
+        <span class="role">{{ authService.getRole()?.replace('ROLE_', '') }}</span>
+      </div>
+      <button class="logout-btn" (click)="logout()">
+        Logout
+      </button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="top-header">
+      <h2>Supervision Module</h2>
+    </header>
+    <div class="content-area">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,42 @@
+<div class="admin-dashboard-container">
+  <header>
+    <h1>Admin Dashboard - Supervision & Controls</h1>
+    
+    <div class="actions">
+      <button class="btn btn-primary" (click)="triggerIngestion()">Trigger Manual Ingestion (.seq)</button>
+      <button class="btn btn-danger" (click)="purgeCache()">Purge Rejected Cache</button>
+    </div>
+  </header>
+
+  <div class="health-cards" *ngIf="health">
+    <div class="card">
+      <div class="card-icon">⚡</div>
+      <div class="card-content">
+        <h4>Active Engines</h4>
+        <h2>{{ health.activeEngines }}</h2>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-icon">📋</div>
+      <div class="card-content">
+        <h4>Queue Count</h4>
+        <h2>{{ health.queueCount }}</h2>
+      </div>
+    </div>
+    <div class="card error-card">
+      <div class="card-icon">⚠️</div>
+      <div class="card-content">
+        <h4>Total Errors Today</h4>
+        <h2>{{ health.totalErrorsToday }}</h2>
+      </div>
+    </div>
+  </div>
+
+  <hr class="separator" />
+
+  <!-- Embed the User Dashboard for visualization, but Admin has extra actions in their view -->
+  <app-user-dashboard></app-user-dashboard>
+
+  <!-- Note: We are simulating adding an action column to the existing User Dashboard table. 
+       In a real app, the table component would take inputs/outputs or use slots. -->
+</div>
