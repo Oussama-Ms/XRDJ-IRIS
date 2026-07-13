@@ -10,7 +10,7 @@
 .header-section h3 {
   margin: 0 0 8px 0;
   font-size: 1.5em;
-  color: #111827;
+  color: #004b87;
 }
 
 .header-section p {
@@ -74,7 +74,7 @@
 .info h4 {
   margin: 4px 0 0 0;
   font-size: 1.5em;
-  color: #111827;
+  color: #004b87;
 }
 
 .action-panel {
@@ -93,7 +93,7 @@
 
 .action-card h4 {
   margin: 0 0 12px 0;
-  color: #111827;
+  color: #004b87;
 }
 
 .action-card p {
@@ -118,19 +118,20 @@
 }
 
 .btn-primary {
-  background-color: #3b82f6;
+  background-color: #004b87;
   color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: #2563eb;
+  background-color: #003366;
 }
 
 .btn-danger {
-  background-color: #ef4444;
-  color: white;
+  background-color: #fbb900;
+  color: #004b87;
+  font-weight: 600;
 }
 
 .btn-danger:hover {
-  background-color: #dc2626;
+  background-color: #e5a800;
 }

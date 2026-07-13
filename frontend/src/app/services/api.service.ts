@@ -29,8 +29,8 @@ export class ApiService {
     return this.http.post<void>(`${this.apiUrl}/admin/trigger-ingestion`, {});
   }
 
-  purgeCache(): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/admin/purge-cache`, {});
+  clearData(): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/admin/clear-data`);
   }
 
   reprocessTreatment(id: string): Observable<void> {

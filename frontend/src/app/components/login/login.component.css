@@ -3,7 +3,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1f2937, #111827);
+  background: linear-gradient(135deg, #004b87, #002244);
   background-size: cover;
 }
 
@@ -75,7 +75,7 @@ input {
 
 input:focus {
   outline: none;
-  border-color: #3b82f6;
+  border-color: #ffd700;
   background: rgba(255, 255, 255, 0.15);
 }
 
@@ -86,12 +86,12 @@ input::placeholder {
 .btn-login {
   width: 100%;
   padding: 12px;
-  background: linear-gradient(135deg, #3b82f6, #6366f1);
-  color: white;
+  background: #ffd700;
+  color: #004b87;
   border: none;
   border-radius: 8px;
   font-size: 1em;
-  font-weight: 600;
+  font-weight: 700;
   cursor: pointer;
   transition: opacity 0.2s;
   margin-top: 10px;
@@ -107,9 +107,9 @@ input::placeholder {
 }
 
 .error-banner {
-  background-color: rgba(239, 68, 68, 0.2);
-  border: 1px solid #ef4444;
-  color: #fca5a5;
+  background-color: rgba(255, 215, 0, 0.2);
+  border: 1px solid #ffd700;
+  color: #ffd700;
   padding: 10px;
   border-radius: 8px;
   text-align: center;

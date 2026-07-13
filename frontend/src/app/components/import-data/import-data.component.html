@@ -1,7 +1,7 @@
 <div class="import-container">
   <div class="header-section">
-    <h3>Data Ingestion & Management</h3>
-    <p>Manage the `.seq` file pipelines and clear the rejection queues.</p>
+    <h3>{{ 'IMPORT.TITLE' | translate }}</h3>
+    <p>{{ 'IMPORT.SUBTITLE' | translate }}</p>
   </div>
 
   <div class="alert success" *ngIf="successMsg">
@@ -11,19 +11,19 @@
   <div class="health-cards" *ngIf="health">
     <div class="health-card">
       <div class="info">
-        <span>Active Engines</span>
+        <span>{{ 'IMPORT.INSTANCES_ACTIVES' | translate }}</span>
         <h4>{{ health.activeEngines }}</h4>
       </div>
     </div>
     <div class="health-card">
       <div class="info">
-        <span>Queue Count</span>
+        <span>{{ 'IMPORT.FICHIERS_ATTENTE' | translate }}</span>
         <h4>{{ health.queueCount }}</h4>
       </div>
     </div>
     <div class="health-card">
       <div class="info">
-        <span>Total Errors</span>
+        <span>{{ 'IMPORT.TOTAL_REJETS' | translate }}</span>
         <h4>{{ health.totalErrorsToday }}</h4>
       </div>
     </div>
@@ -31,17 +31,17 @@
 
   <div class="action-panel">
     <div class="action-card">
-      <h4>Trigger Manual Ingestion</h4>
-      <p>Simulate reading and parsing a pending `.seq` file.</p>
+      <h4>{{ 'IMPORT.TRIGGER_MANUAL' | translate }}</h4>
+      <p>{{ 'IMPORT.SIMULATE_READING' | translate }}</p>
       <button class="btn btn-primary" (click)="triggerIngestion()" [disabled]="loading">
-        {{ loading ? 'Processing...' : 'Run Ingestion' }}
+        {{ loading ? ('IMPORT.PROCESSING' | translate) : ('IMPORT.RUN_INGESTION' | translate) }}
       </button>
     </div>
 
     <div class="action-card">
-      <h4>Purge Rejections</h4>
-      <p>Clear completely rejected items from the cache.</p>
-      <button class="btn btn-danger" (click)="purgeCache()">Purge Cache</button>
+      <h4>{{ 'IMPORT.CLEAR_DB' | translate }}</h4>
+      <p>{{ 'IMPORT.CLEAR_DESC' | translate }}</p>
+      <button class="btn btn-danger" (click)="clearData()">{{ 'IMPORT.CLEAR_DB' | translate }}</button>
     </div>
   </div>
 </div>

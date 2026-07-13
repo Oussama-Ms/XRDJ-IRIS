@@ -1,26 +1,22 @@
 package com.xrdj.iris.controller;
 
 import com.xrdj.iris.dto.SystemHealthDto;
-import com.xrdj.iris.service.TreatmentMockService;
+import com.xrdj.iris.service.TreatmentService;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
 
-    private final TreatmentMockService treatmentService;
+    private final TreatmentService treatmentService;
 
-    public AdminController(TreatmentMockService treatmentService) {
+    public AdminController(TreatmentService treatmentService) {
         this.treatmentService = treatmentService;
     }
 
     @GetMapping("/health")
     public SystemHealthDto getHealth() {
-        // Mock system health
-        int errorCount = (int) treatmentService.getAllTreatments().stream()
-                .mapToLong(t -> t.getNbCreRejetes())
-                .sum();
-        return new SystemHealthDto(5, 12, errorCount);
+        return treatmentService.getSystemHealth();
     }
 
     @PostMapping("/trigger-ingestion")
@@ -28,9 +24,9 @@ public class AdminController {
         treatmentService.triggerManualIngestion();
     }
 
-    @PostMapping("/purge-cache")
-    public void purgeCache() {
-        treatmentService.purgeRejectedCache();
+    @DeleteMapping("/clear-data")
+    public void clearData() {
+        treatmentService.clearAllData();
     }
 
     @PostMapping("/reprocess/{id}")

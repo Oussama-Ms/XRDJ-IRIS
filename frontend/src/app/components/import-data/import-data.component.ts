@@ -2,11 +2,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { CommonModule } from '@angular/common';
 import { SystemHealth } from '../../models/system-health.model';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-import-data',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslateModule],
   templateUrl: './import-data.component.html',
   styleUrl: './import-data.component.css'
 })
@@ -34,9 +35,9 @@ export class ImportDataComponent implements OnInit {
     });
   }
 
-  purgeCache() {
-    this.apiService.purgeCache().subscribe(() => {
-      this.successMsg = 'Rejected cache purged.';
+  clearData() {
+    this.apiService.clearData().subscribe(() => {
+      this.successMsg = 'Database data cleared successfully.';
       this.loadHealth();
       setTimeout(() => this.successMsg = '', 3000);
     });

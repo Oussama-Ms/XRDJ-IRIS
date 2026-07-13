@@ -1,7 +1,7 @@
 package com.xrdj.iris.controller;
 
 import com.xrdj.iris.model.AccountingTreatment;
-import com.xrdj.iris.service.TreatmentMockService;
+import com.xrdj.iris.service.TreatmentService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/dashboard")
 public class DashboardController {
 
-    private final TreatmentMockService treatmentService;
+    private final TreatmentService treatmentService;
 
-    public DashboardController(TreatmentMockService treatmentService) {
+    public DashboardController(TreatmentService treatmentService) {
         this.treatmentService = treatmentService;
     }
 

@@ -1,0 +1,49 @@
+{
+  "DASHBOARD": {
+    "TITLE": "User Dashboard - Operations",
+    "MACRO_TABLE": "Macro Monitoring Table",
+    "TREATMENT_HISTORY": "Treatment History",
+    "REJECTS_TRACKING": "Rejects Tracking by Flux",
+    "EXPORT_CSV": "Export CSV",
+    "EXPORT_PDF": "Export PDF",
+    "START_DATE": "START DATE",
+    "END_DATE": "END DATE",
+    "CHOOSE_FLUX": "Choose flux",
+    "PREVIOUS": "Previous",
+    "NEXT": "Next"
+  },
+  "TABLE": {
+    "DATE": "Treatment Date",
+    "TIME": "Treatment Time",
+    "FLUX_NAME": "Flux Name",
+    "CRE_FILE": "CRE File Name",
+    "CRE_RECEIVED": "CRE Received",
+    "CRE_TREATED": "CRE Treated",
+    "CRE_REJECTED": "CRE Rejected",
+    "ME_GENERATED": "ME Generated",
+    "STATUS": "Status"
+  },
+  "STATUS": {
+    "TRAITE_COMPLETEMENT": "Completely Treated",
+    "REJETE_PARTIELLEMENT": "Partially Rejected",
+    "REJETE_COMPLETEMENT": "Completely Rejected"
+  },
+  "LAYOUT": {
+    "DASHBOARD": "Dashboard",
+    "IMPORT_DATA": "Import Data",
+    "LOGOUT": "Logout"
+  },
+  "IMPORT": {
+    "TITLE": "Data Ingestion & Management",
+    "SUBTITLE": "Manage the .seq file pipelines and clear the rejection queues.",
+    "INSTANCES_ACTIVES": "Active Instances",
+    "FICHIERS_ATTENTE": "Pending Files",
+    "TOTAL_REJETS": "Total Rejects",
+    "TRIGGER_MANUAL": "Trigger Manual Ingestion",
+    "SIMULATE_READING": "Simulate reading and parsing a pending .seq file.",
+    "RUN_INGESTION": "Run Ingestion",
+    "PROCESSING": "Processing...",
+    "CLEAR_DB": "Clear Database Data",
+    "CLEAR_DESC": "Clear all incorrectly extracted records from the database."
+  }
+}

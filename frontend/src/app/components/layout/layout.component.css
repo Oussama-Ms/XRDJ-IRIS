@@ -6,20 +6,21 @@
 
 .sidebar {
   width: 260px;
-  background-color: #111827;
-  color: #f3f4f6;
+  background-color: #004b87;
+  color: #ffffff;
   display: flex;
   flex-direction: column;
-  box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+  box-shadow: 4px 0 10px rgba(0, 0, 0, 0.1);
   z-index: 10;
 }
 
 .brand {
-  padding: 24px;
+  padding: 20px 16px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  border-bottom: 1px solid #1f2937;
+  justify-content: center;
+  gap: 15px;
+  border-bottom: 1px solid #003366;
 }
 
 .logo {
@@ -63,19 +64,19 @@
 }
 
 .nav-item:hover {
-  background-color: #1f2937;
+  background-color: #003366;
   color: white;
 }
 
 .nav-item.active {
-  background: linear-gradient(90deg, rgba(59,130,246,0.1) 0%, transparent 100%);
-  color: #3b82f6;
-  border-left: 4px solid #3b82f6;
+  background: rgba(255, 215, 0, 0.1);
+  color: #ffd700;
+  border-left: 4px solid #ffd700;
 }
 
 .user-profile {
   padding: 20px;
-  border-top: 1px solid #1f2937;
+  border-top: 1px solid #003366;
 }
 
 .user-info {
@@ -83,19 +84,20 @@
 }
 
 .role {
-  background-color: #374151;
+  background-color: #ffd700;
+  color: #004b87;
   padding: 4px 10px;
   border-radius: 12px;
   font-size: 0.75em;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 1px;
 }
 
 .logout-btn {
   width: 100%;
   background: transparent;
-  border: 1px solid #374151;
-  color: #d1d5db;
+  border: 1px solid #ffd700;
+  color: #ffd700;
   padding: 10px;
   border-radius: 6px;
   cursor: pointer;
@@ -107,9 +109,8 @@
 }
 
 .logout-btn:hover {
-  background-color: #ef4444;
-  color: white;
-  border-color: #ef4444;
+  background-color: #ffd700;
+  color: #004b87;
 }
 
 .main-content {
@@ -127,7 +128,7 @@
   display: flex;
   align-items: center;
   padding: 0 32px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .top-header h2 {
@@ -143,4 +144,8 @@
   padding: 32px;
 }
 
-.sidebar-logo { max-width: 40px; height: auto; border-radius: 4px; }
+.sidebar-logo {
+  max-width: 100px;
+  height: auto;
+  border-radius: 6px;
+}

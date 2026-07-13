@@ -1,26 +1,44 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BaseChartDirective } from 'ng2-charts';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { ApiService } from '../../services/api.service';
 import { AccountingTreatment } from '../../models/treatment.model';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-visualize',
   standalone: true,
-  imports: [CommonModule, FormsModule, BaseChartDirective],
+  imports: [CommonModule, FormsModule, BaseChartDirective, TranslateModule],
+  providers: [DatePipe],
   templateUrl: './visualize.component.html',
   styleUrl: './visualize.component.css'
 })
 export class VisualizeComponent implements OnInit {
   protected apiService = inject(ApiService);
+  public translate = inject(TranslateService);
+  private datePipe = inject(DatePipe);
+  
   treatments: AccountingTreatment[] = [];
+  filteredTreatments: AccountingTreatment[] = [];
+  
+  // Pagination
+  currentPage: number = 1;
+  pageSize: number = 5;
+
+  // Filters
+  startDate: string = '';
+  endDate: string = '';
+  selectedFluxName: string = '';
+  fluxNames: string[] = [];
   
   // Pie chart
   public pieChartOptions: ChartConfiguration['options'] = {
     responsive: true,
-    plugins: { legend: { display: true, position: 'bottom' } },
+    plugins: { legend: { display: false } }, // the image has legend on left, custom legend maybe, but I will put it false or top
   };
   public pieChartData: ChartData<'pie', number[], string | string[]> = { labels: [], datasets: [{ data: [] }] };
   public pieChartType: ChartType = 'pie';
@@ -29,7 +47,7 @@ export class VisualizeComponent implements OnInit {
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     scales: { x: {}, y: { beginAtZero: true } },
-    plugins: { legend: { display: true } },
+    plugins: { legend: { display: true, position: 'top' } },
   };
   public barChartType: ChartType = 'bar';
   public barChartData: ChartData<'bar'> = { labels: [], datasets: [] };
@@ -38,13 +56,16 @@ export class VisualizeComponent implements OnInit {
   public selectedFluxTypes: { [key: string]: boolean } = {};
 
   ngOnInit(): void {
+    this.pieChartOptions!.plugins!.legend = { display: true, position: 'left' };
     this.loadData();
   }
 
   loadData(): void {
     this.apiService.getTreatments().subscribe(data => {
       this.treatments = data;
-      this.updateBarChart(data);
+      this.filteredTreatments = [...this.treatments];
+      this.fluxNames = [...new Set(data.map(t => t.typeFlux))];
+      this.updateBarChart(this.filteredTreatments);
     });
 
     this.apiService.getRejectionsSummary().subscribe(data => {
@@ -58,25 +79,79 @@ export class VisualizeComponent implements OnInit {
     });
   }
 
+  get paginatedTreatments(): AccountingTreatment[] {
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    return this.filteredTreatments.slice(startIndex, startIndex + this.pageSize);
+  }
+
+  get totalPages(): number {
+    return Math.ceil(this.filteredTreatments.length / this.pageSize) || 1;
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) this.currentPage++;
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) this.currentPage--;
+  }
+
+  applyFilters() {
+    this.filteredTreatments = this.treatments.filter(t => {
+      let match = true;
+      const tDate = new Date(t.dateTraitement);
+      
+      if (this.startDate) {
+        const start = new Date(this.startDate);
+        if (tDate < start) match = false;
+      }
+      if (this.endDate) {
+        const end = new Date(this.endDate);
+        // set end to end of day
+        end.setHours(23, 59, 59, 999);
+        if (tDate > end) match = false;
+      }
+      if (this.selectedFluxName && this.selectedFluxName !== '') {
+        if (t.typeFlux !== this.selectedFluxName) match = false;
+      }
+      return match;
+    });
+
+    this.currentPage = 1;
+    this.updateBarChart(this.filteredTreatments);
+
+    // Filter pie chart dynamically based on visible items
+    const rejectionsByFlux: { [key: string]: number } = {};
+    this.filteredTreatments.forEach(t => {
+        if (!rejectionsByFlux[t.typeFlux]) rejectionsByFlux[t.typeFlux] = 0;
+        rejectionsByFlux[t.typeFlux] += t.nbCreRejetes;
+    });
+    this.updatePieChart(rejectionsByFlux);
+  }
+
   updateBarChart(data: AccountingTreatment[]) {
     const dates = [...new Set(data.map(t => new Date(t.dateTraitement).toLocaleDateString()))];
     const traites = dates.map(d => data.filter(t => new Date(t.dateTraitement).toLocaleDateString() === d).reduce((sum, t) => sum + t.nbCreTraites, 0));
     const rejetes = dates.map(d => data.filter(t => new Date(t.dateTraitement).toLocaleDateString() === d).reduce((sum, t) => sum + t.nbCreRejetes, 0));
+    const recus = dates.map(d => data.filter(t => new Date(t.dateTraitement).toLocaleDateString() === d).reduce((sum, t) => sum + t.nbCreRecus, 0));
 
-    this.barChartData = {
-      labels: dates,
-      datasets: [
-        { data: traites, label: 'CRE Traités', backgroundColor: '#3b82f6', borderRadius: 4 },
-        { data: rejetes, label: 'CRE Rejetés', backgroundColor: '#ef4444', borderRadius: 4 }
-      ]
-    };
+    this.translate.get(['TABLE.CRE_RECEIVED', 'TABLE.CRE_TREATED', 'TABLE.CRE_REJECTED']).subscribe(res => {
+      this.barChartData = {
+        labels: dates,
+        datasets: [
+          { data: recus, label: res['TABLE.CRE_RECEIVED'] || 'CRE Reçu', backgroundColor: '#93c5fd' },
+          { data: traites, label: res['TABLE.CRE_TREATED'] || 'CRE Traité', backgroundColor: '#86efac' },
+          { data: rejetes, label: res['TABLE.CRE_REJECTED'] || 'CRE Rejeté', backgroundColor: '#fde047' }
+        ]
+      };
+    });
   }
 
   updatePieChart(data: { [key: string]: number }) {
     const labels = [];
     const values = [];
     for (const key of Object.keys(data)) {
-      if (this.selectedFluxTypes[key]) {
+      if (this.selectedFluxTypes[key] !== false) {
         labels.push(key);
         values.push(data[key]);
       }
@@ -86,12 +161,93 @@ export class VisualizeComponent implements OnInit {
       labels: labels,
       datasets: [{
         data: values,
-        backgroundColor: ['#ef4444', '#f59e0b', '#3b82f6', '#10b981']
+        backgroundColor: ['#fde047', '#e879f9', '#93c5fd', '#86efac', '#fca5a5']
       }]
     };
   }
 
   onFilterChange() {
-    this.apiService.getRejectionsSummary().subscribe(data => this.updatePieChart(data));
+    this.applyFilters();
+  }
+
+  switchLang(lang: string) {
+    this.translate.use(lang);
+    this.updateBarChart(this.filteredTreatments);
+  }
+
+  exportCSV() {
+    this.translate.get(['TABLE.DATE', 'TABLE.TIME', 'TABLE.FLUX_NAME', 'TABLE.CRE_FILE', 'TABLE.CRE_RECEIVED', 'TABLE.CRE_TREATED', 'TABLE.CRE_REJECTED', 'TABLE.ME_GENERATED', 'TABLE.STATUS']).subscribe(headers => {
+      const headerRow = [
+        headers['TABLE.DATE'], headers['TABLE.TIME'], headers['TABLE.FLUX_NAME'], headers['TABLE.CRE_FILE'],
+        headers['TABLE.CRE_RECEIVED'], headers['TABLE.CRE_TREATED'], headers['TABLE.CRE_REJECTED'],
+        headers['TABLE.ME_GENERATED'], headers['TABLE.STATUS']
+      ].join(';');
+
+      const csvData = this.filteredTreatments.map(t => {
+        return [
+          this.datePipe.transform(t.dateTraitement, 'dd/MM/yyyy'),
+          this.datePipe.transform(t.dateTraitement, 'HH:mm:ss'),
+          t.nomApplication,
+          t.typeFlux,
+          t.nbCreRecus,
+          t.nbCreTraites,
+          t.nbCreRejetes,
+          t.nbMeGeneres,
+          this.translate.instant('STATUS.' + (
+            t.statut === 'Traité complètement' ? 'TRAITE_COMPLETEMENT' :
+            t.statut === 'Rejeté partiellement' ? 'REJETE_PARTIELLEMENT' :
+            t.statut === 'Rejeté complètement' ? 'REJETE_COMPLETEMENT' : ''
+          )) || t.statut
+        ].join(';');
+      });
+
+      const blob = new Blob([headerRow + '\\n' + csvData.join('\\n')], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute('download', 'export_macro.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  }
+
+  exportPDF() {
+    this.translate.get(['DASHBOARD.MACRO_TABLE', 'TABLE.DATE', 'TABLE.TIME', 'TABLE.FLUX_NAME', 'TABLE.CRE_FILE', 'TABLE.CRE_RECEIVED', 'TABLE.CRE_TREATED', 'TABLE.CRE_REJECTED', 'TABLE.ME_GENERATED', 'TABLE.STATUS']).subscribe(res => {
+      const doc = new jsPDF('landscape');
+      
+      const head = [[
+        res['TABLE.DATE'], res['TABLE.TIME'], res['TABLE.FLUX_NAME'], res['TABLE.CRE_FILE'],
+        res['TABLE.CRE_RECEIVED'], res['TABLE.CRE_TREATED'], res['TABLE.CRE_REJECTED'],
+        res['TABLE.ME_GENERATED'], res['TABLE.STATUS']
+      ]];
+
+      const body = this.filteredTreatments.map(t => [
+        this.datePipe.transform(t.dateTraitement, 'dd/MM/yyyy'),
+        this.datePipe.transform(t.dateTraitement, 'HH:mm:ss'),
+        t.nomApplication,
+        t.typeFlux,
+        t.nbCreRecus.toString(),
+        t.nbCreTraites.toString(),
+        t.nbCreRejetes.toString(),
+        t.nbMeGeneres.toString(),
+        this.translate.instant('STATUS.' + (
+          t.statut === 'Traité complètement' ? 'TRAITE_COMPLETEMENT' :
+          t.statut === 'Rejeté partiellement' ? 'REJETE_PARTIELLEMENT' :
+          t.statut === 'Rejeté complètement' ? 'REJETE_COMPLETEMENT' : ''
+        )) || t.statut
+      ]);
+
+      doc.text(res['DASHBOARD.MACRO_TABLE'], 14, 15);
+      autoTable(doc, {
+        head: head,
+        body: body,
+        startY: 20,
+        theme: 'striped',
+        styles: { fontSize: 8 },
+        headStyles: { fillColor: [59, 130, 246] }
+      });
+      
+      doc.save('export_macro.pdf');
+    });
   }
 }

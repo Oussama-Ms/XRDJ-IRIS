@@ -1,14 +1,115 @@
+<div class="dashboard-header">
+  <div class="lang-toggle">
+    <button (click)="switchLang('en')"><i class="fa-solid fa-globe"></i> EN</button>
+    <button (click)="switchLang('fr')"><i class="fa-solid fa-globe"></i> FR</button>
+  </div>
+</div>
+
+<div class="filters-bar card">
+  <div class="filter-group">
+    <label>{{ 'DASHBOARD.START_DATE' | translate }}</label>
+    <input type="date" class="form-control" [(ngModel)]="startDate" />
+  </div>
+  <div class="filter-group">
+    <label>{{ 'DASHBOARD.END_DATE' | translate }}</label>
+    <input type="date" class="form-control" [(ngModel)]="endDate" />
+  </div>
+  <div class="filter-group">
+    <label>{{ 'TABLE.FLUX_NAME' | translate }}</label>
+    <select class="form-control" [(ngModel)]="selectedFluxName">
+      <option value="">{{ 'DASHBOARD.CHOOSE_FLUX' | translate }}</option>
+      <option *ngFor="let flux of fluxNames" [value]="flux">{{ flux }}</option>
+    </select>
+  </div>
+  <div class="filter-actions">
+    <button class="btn btn-search" (click)="applyFilters()">
+      <i class="fa-solid fa-search"></i>
+    </button>
+  </div>
+</div>
+
 <div class="dashboard-grid">
-  
+  <div class="card table-card">
+    <div class="table-header">
+      <div style="display: flex; justify-content: space-between; width: 100%;">
+        <h3>{{ 'DASHBOARD.MACRO_TABLE' | translate }}</h3>
+        <div class="export-buttons">
+          <button class="btn btn-icon btn-pdf" (click)="exportPDF()" title="{{ 'DASHBOARD.EXPORT_PDF' | translate }}">
+            <i class="fa-solid fa-file-pdf"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>{{ 'TABLE.DATE' | translate }}</th>
+            <th>{{ 'TABLE.TIME' | translate }}</th>
+            <th>{{ 'TABLE.FLUX_NAME' | translate }}</th>
+            <th>{{ 'TABLE.CRE_FILE' | translate }}</th>
+            <th>{{ 'TABLE.CRE_RECEIVED' | translate }}</th>
+            <th>{{ 'TABLE.CRE_TREATED' | translate }}</th>
+            <th>{{ 'TABLE.CRE_REJECTED' | translate }}</th>
+            <th>{{ 'TABLE.ME_GENERATED' | translate }}</th>
+            <th>{{ 'TABLE.STATUS' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let t of paginatedTreatments">
+            <td>{{ t.dateTraitement | date:'dd/MM/yyyy' }}</td>
+            <td>{{ t.dateTraitement | date:'HH:mm:ss' }}</td>
+            <td>{{ t.nomApplication }}</td>
+            <td><span class="tag">{{ t.typeFlux }}</span></td>
+            <td style="color: #60a5fa;">{{ t.nbCreRecus }}</td>
+            <td style="color: #4ade80; font-weight: bold;">{{ t.nbCreTraites }}</td>
+            <td [class.error-text]="t.nbCreRejetes > 0">{{ t.nbCreRejetes }}</td>
+            <td>{{ t.nbMeGeneres }}</td>
+            <td>
+              <span class="status-badge" [ngClass]="{
+                'status-success': t.statut === 'Traité complètement',
+                'status-warning': t.statut === 'Rejeté partiellement',
+                'status-error': t.statut === 'Rejeté complètement'
+              }">
+                {{ t.statut === 'Traité complètement' ? ('STATUS.TRAITE_COMPLETEMENT' | translate) : 
+                   t.statut === 'Rejeté partiellement' ? ('STATUS.REJETE_PARTIELLEMENT' | translate) : 
+                   t.statut === 'Rejeté complètement' ? ('STATUS.REJETE_COMPLETEMENT' | translate) : t.statut }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination">
+      <button class="btn btn-text" (click)="previousPage()" [disabled]="currentPage === 1">
+        <i class="fa-solid fa-arrow-left"></i> {{ 'DASHBOARD.PREVIOUS' | translate }}
+      </button>
+      <span class="page-number">{{ currentPage }} / {{ totalPages }}</span>
+      <button class="btn btn-text" (click)="nextPage()" [disabled]="currentPage >= totalPages">
+        {{ 'DASHBOARD.NEXT' | translate }} <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+
   <div class="card chart-card">
-    <h3>Historique des Traitements</h3>
+    <div style="display: flex; justify-content: space-between; width: 100%;">
+      <h3>{{ 'DASHBOARD.TREATMENT_HISTORY' | translate }}</h3>
+      <button class="btn btn-icon btn-pdf" (click)="exportPDF()" title="{{ 'DASHBOARD.EXPORT_PDF' | translate }}">
+        <i class="fa-solid fa-file-pdf"></i>
+      </button>
+    </div>
     <div class="chart-wrapper">
       <canvas baseChart [data]="barChartData" [options]="barChartOptions" [type]="barChartType"></canvas>
     </div>
   </div>
 
   <div class="card chart-card">
-    <h3>Suivi des Rejets par Flux</h3>
+    <div style="display: flex; justify-content: space-between; width: 100%;">
+      <h3>{{ 'DASHBOARD.REJECTS_TRACKING' | translate }}</h3>
+      <button class="btn btn-icon btn-pdf" (click)="exportPDF()" title="{{ 'DASHBOARD.EXPORT_PDF' | translate }}">
+        <i class="fa-solid fa-file-pdf"></i>
+      </button>
+    </div>
     <div class="filters">
       <label *ngFor="let flux of availableFluxTypes" class="checkbox-label">
         <input type="checkbox" [(ngModel)]="selectedFluxTypes[flux]" (change)="onFilterChange()" />
@@ -19,41 +120,4 @@
       <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" [type]="pieChartType"></canvas>
     </div>
   </div>
-
-  <div class="card table-card">
-    <h3>Tableau de Suivi Macro</h3>
-    <div class="table-responsive">
-      <table class="data-table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Application</th>
-            <th>Flux</th>
-            <th>Reçus</th>
-            <th>Traités</th>
-            <th>Rejetés</th>
-            <th>Statut</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let t of treatments">
-            <td>{{ t.dateTraitement | date:'short' }}</td>
-            <td>{{ t.nomApplication }}</td>
-            <td><span class="tag">{{ t.typeFlux }}</span></td>
-            <td>{{ t.nbCreRecus }}</td>
-            <td class="success-text">{{ t.nbCreTraites }}</td>
-            <td [class.error-text]="t.nbCreRejetes > 0">{{ t.nbCreRejetes }}</td>
-            <td>
-              <span class="status-badge" [ngClass]="{
-                'status-success': t.statut === 'Traité complètement',
-                'status-warning': t.statut === 'Rejeté partiellement',
-                'status-error': t.statut === 'Rejeté complètement'
-              }">{{ t.statut }}</span>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
 </div>

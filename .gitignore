@@ -43,3 +43,38 @@ Thumbs.db
 
 ### Other ###
 *.log
+
+### Security & Sensitive Files ###
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Keystores and Certificates
+*.jks
+*.p12
+*.pfx
+*.pem
+*.key
+*.cer
+
+# Application secrets
+*secret*.properties
+*secret*.yml
+*secret*.yaml
+
+# Data files (including the raw seq files)
+data/
+*.seq
+*.db
+*.sqlite
+*.sqlite3
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
