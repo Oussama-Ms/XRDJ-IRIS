@@ -31,11 +31,14 @@
 <div class="dashboard-grid">
   <div class="card table-card">
     <div class="table-header">
-      <div style="display: flex; justify-content: space-between; width: 100%;">
-        <h3>{{ 'DASHBOARD.MACRO_TABLE' | translate }}</h3>
-        <div class="export-buttons">
-          <button class="btn btn-icon btn-pdf" (click)="exportPDF()" title="{{ 'DASHBOARD.EXPORT_PDF' | translate }}">
+      <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <h3 style="margin: 0;">{{ 'DASHBOARD.MACRO_TABLE' | translate }}</h3>
+        <div class="export-buttons" style="display: flex; gap: 8px;">
+          <button class="btn btn-icon btn-pdf" (click)="exportPDF()" title="{{ 'DASHBOARD.EXPORT_PDF' | translate }}" style="display: flex; align-items: center; justify-content: center;">
             <i class="fa-solid fa-file-pdf"></i>
+          </button>
+          <button class="btn btn-icon btn-excel" (click)="exportExcel()" title="Export Excel" style="display: flex; align-items: center; justify-content: center;">
+            <i class="fa-solid fa-file-excel"></i>
           </button>
         </div>
       </div>

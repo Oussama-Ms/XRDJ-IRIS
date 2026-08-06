@@ -1,0 +1,161 @@
+<div class="dashboard-header">
+  <div class="lang-toggle">
+    <button (click)="switchLang('en')"><i class="fa-solid fa-globe"></i> EN</button>
+    <button (click)="switchLang('fr')"><i class="fa-solid fa-globe"></i> FR</button>
+  </div>
+</div>
+
+<div class="filters-bar card">
+  <div class="filter-group">
+    <label>{{ 'DASHBOARD.SEARCH' | translate }}</label>
+    <input type="text" class="form-control" placeholder="{{ 'STOCK_REJETS.SEARCH_PLACEHOLDER' | translate }}" [(ngModel)]="searchTerm" />
+  </div>
+  <div class="filter-actions">
+    <button class="btn btn-search" (click)="applyFilters()">
+      <i class="fa-solid fa-search"></i>
+    </button>
+  </div>
+</div>
+
+<div class="dashboard-grid" style="grid-template-columns: 1fr;">
+  <div class="card table-card">
+    <div class="table-header">
+      <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <h3 style="margin: 0;">{{ 'STOCK_REJETS.TITLE' | translate }}</h3>
+        <div class="export-buttons" style="display: flex; gap: 8px;">
+          <button class="btn btn-icon btn-pdf" (click)="exportPDF()" title="{{ 'DASHBOARD.EXPORT_PDF' | translate }}" style="display: flex; align-items: center; justify-content: center;">
+            <i class="fa-solid fa-file-pdf"></i>
+          </button>
+          <button class="btn btn-icon btn-excel" (click)="exportExcel()" title="Export Excel" style="display: flex; align-items: center; justify-content: center;">
+            <i class="fa-solid fa-file-excel"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>{{ 'TABLE.CRE_TYPE' | translate }}</th>
+            <th>{{ 'TABLE.COD_APP' | translate }}</th>
+            <th>{{ 'TABLE.BATCHID' | translate }}</th>
+            <th>{{ 'TABLE.ID_CRE' | translate }}</th>
+            <th>{{ 'TABLE.CODE_ERREUR' | translate }}</th>
+            <th>{{ 'TABLE.TEXTE_ERREUR' | translate }}</th>
+            <th>{{ 'TABLE.NBR_RECYCLAGE' | translate }}</th>
+            <th>{{ 'TABLE.DAR_DATE' | translate }}</th>
+            <th>{{ 'TABLE.DAR_TIME' | translate }}</th>
+            <th>{{ 'TABLE.COD_LOT' | translate }}</th>
+            <th>{{ 'TABLE.COD_AGENCE' | translate }}</th>
+            <th>{{ 'TABLE.DAT_OPERAT' | translate }}</th>
+            <th>{{ 'TABLE.DEVISE_OP' | translate }}</th>
+            <th>{{ 'TABLE.MNT_OPERAT' | translate }}</th>
+            <th>{{ 'TABLE.CODE_RECYCLAGE' | translate }}</th>
+            <th>{{ 'TABLE.CODE_PHASE' | translate }}</th>
+            <th>{{ 'TABLE.CODE_DOMAINE' | translate }}</th>
+            <th>{{ 'TABLE.TEXTE_COMP_ERREUR' | translate }}</th>
+            <th>{{ 'TABLE.EMETTEUR' | translate }}</th>
+            <th>{{ 'TABLE.NUM_CRE_ERR' | translate }}</th>
+            <th>{{ 'TABLE.CODE_CRE' | translate }}</th>
+            <th>{{ 'TABLE.VERSION_CRE' | translate }}</th>
+            <th>{{ 'TABLE.CODE_INSTANCE' | translate }}</th>
+            <th>{{ 'TABLE.NUM_ANO' | translate }}</th>
+            <th>{{ 'TABLE.TYP_ANO' | translate }}</th>
+            <th>{{ 'TABLE.NIV_GENE' | translate }}</th>
+            <th>{{ 'TABLE.ORIGINE_ANO' | translate }}</th>
+            <th>{{ 'TABLE.IND_ENREG_CRE' | translate }}</th>
+            <th>{{ 'TABLE.CODE_ENREG' | translate }}</th>
+            <th>{{ 'TABLE.TYPE_REGLE' | translate }}</th>
+            <th>{{ 'TABLE.CODE_REGLE_ENREG' | translate }}</th>
+            <th>{{ 'TABLE.DEB_VERSION_REGLE_ENREG' | translate }}</th>
+            <th>{{ 'TABLE.FIN_VERSION_REGLE_ENREG' | translate }}</th>
+            <th>{{ 'TABLE.CODE_REGLE_ME' | translate }}</th>
+            <th>{{ 'TABLE.DEB_VERSION_REGLE_ME' | translate }}</th>
+            <th>{{ 'TABLE.FIN_VERSION_REGLE_ME' | translate }}</th>
+            <th>{{ 'TABLE.CODE' | translate }}</th>
+            <th>{{ 'TABLE.IDF_VACATION' | translate }}</th>
+            <th>{{ 'TABLE.IDF_ETAPE' | translate }}</th>
+            <th>{{ 'TABLE.DATE_VACATION' | translate }}</th>
+            <th>{{ 'TABLE.HEURE_VACATION' | translate }}</th>
+            <th>{{ 'TABLE.LOT' | translate }}</th>
+            <th>{{ 'TABLE.NIV_DETECT' | translate }}</th>
+            <th>{{ 'TABLE.CODE_PRIO_SCHEMA' | translate }}</th>
+            <th>{{ 'TABLE.CODE_SCHEMA' | translate }}</th>
+            <th>{{ 'TABLE.NUM_SEQ_GARN' | translate }}</th>
+            <th>{{ 'TABLE.ADR_GARN' | translate }}</th>
+            <th>{{ 'TABLE.CODE_FORMAT_ME' | translate }}</th>
+            <th>{{ 'TABLE.MNEMO_MODULE' | translate }}</th>
+            <th>{{ 'TABLE.CODE_ETAT_AUTOM' | translate }}</th>
+            <th>{{ 'TABLE.LG_ENREG' | translate }}</th>
+            <th>{{ 'TABLE.ENREG' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let a of paginatedAnomalies">
+            <td>{{ a.creType }}</td>
+            <td>{{ a.codApp }}</td>
+            <td>{{ a.batchid }}</td>
+            <td>{{ a.idCre }}</td>
+            <td style="color: #ef4444; font-weight: bold;">{{ a.codeErreur }}</td>
+            <td style="font-size: 0.9em; min-width: 300px;">{{ a.texteErreur }}</td>
+            <td>{{ a.nbrRecyclage }}</td>
+            <td>{{ a.darDate }}</td>
+            <td>{{ a.darTime }}</td>
+            <td>{{ a.codLot }}</td>
+            <td>{{ a.codAgence }}</td>
+            <td>{{ a.datOperat }}</td>
+            <td>{{ a.deviseOp }}</td>
+            <td>{{ a.mntOperat }}</td>
+            <td>{{ a.codeRecyclage }}</td>
+            <td>{{ a.codePhase }}</td>
+            <td>{{ a.codeDomaine }}</td>
+            <td style="font-size: 0.9em; min-width: 200px;">{{ a.texteCompErreur }}</td>
+            <td>{{ a.emetteur }}</td>
+            <td>{{ a.numCreErr }}</td>
+            <td>{{ a.codeCre }}</td>
+            <td>{{ a.versionCre }}</td>
+            <td>{{ a.codeInstance }}</td>
+            <td>{{ a.numAno }}</td>
+            <td>{{ a.typAno }}</td>
+            <td>{{ a.nivGene }}</td>
+            <td>{{ a.origineAno }}</td>
+            <td>{{ a.indEnregCre }}</td>
+            <td>{{ a.codeEnreg }}</td>
+            <td>{{ a.typeRegle }}</td>
+            <td>{{ a.codeRegleEnreg }}</td>
+            <td>{{ a.debVersionRegleEnreg }}</td>
+            <td>{{ a.finVersionRegleEnreg }}</td>
+            <td>{{ a.codeRegleMe }}</td>
+            <td>{{ a.debVersionRegleMe }}</td>
+            <td>{{ a.finVersionRegleMe }}</td>
+            <td>{{ a.code }}</td>
+            <td>{{ a.idfVacation }}</td>
+            <td>{{ a.idfEtape }}</td>
+            <td>{{ a.dateVacation }}</td>
+            <td>{{ a.heureVacation }}</td>
+            <td>{{ a.lot }}</td>
+            <td>{{ a.nivDetect }}</td>
+            <td>{{ a.codePrioSchema }}</td>
+            <td>{{ a.codeSchema }}</td>
+            <td>{{ a.numSeqGarn }}</td>
+            <td>{{ a.adrGarn }}</td>
+            <td>{{ a.codeFormatMe }}</td>
+            <td>{{ a.mnemoModule }}</td>
+            <td>{{ a.codeEtatAutom }}</td>
+            <td>{{ a.lgEnreg }}</td>
+            <td>{{ a.enreg }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pagination">
+      <button class="btn btn-text" (click)="previousPage()" [disabled]="currentPage === 1">
+        <i class="fa-solid fa-arrow-left"></i> {{ 'DASHBOARD.PREVIOUS' | translate }}
+      </button>
+      <span class="page-number">{{ currentPage }} / {{ totalPages }}</span>
+      <button class="btn btn-text" (click)="nextPage()" [disabled]="currentPage >= totalPages">
+        {{ 'DASHBOARD.NEXT' | translate }} <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+</div>

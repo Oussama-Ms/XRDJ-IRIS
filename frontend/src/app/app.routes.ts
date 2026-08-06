@@ -3,6 +3,7 @@ import { LoginComponent } from './components/login/login.component';
 import { LayoutComponent } from './components/layout/layout.component';
 import { VisualizeComponent } from './components/visualize/visualize.component';
 import { ImportDataComponent } from './components/import-data/import-data.component';
+import { StockRejetsComponent } from './components/stock-rejets/stock-rejets.component';
 import { authGuard } from './guards/auth.guard';
 import { roleGuard } from './guards/role.guard';
 
@@ -21,7 +22,8 @@ export const routes: Routes = [
         component: ImportDataComponent,
         canActivate: [roleGuard],
         data: { role: 'ROLE_ADMIN' }
-      }
+      },
+      { path: 'stock-rejets', component: StockRejetsComponent }
     ]
   },
   { path: '**', redirectTo: '/login' }

@@ -10,7 +10,8 @@
     "END_DATE": "DATE DE FIN",
     "CHOOSE_FLUX": "Choisir flux",
     "PREVIOUS": "Précédent",
-    "NEXT": "Suivant"
+    "NEXT": "Suivant",
+    "SEARCH": "Chercher"
   },
   "TABLE": {
     "DATE": "Date du traitement",
@@ -21,7 +22,59 @@
     "CRE_TREATED": "CRE traité",
     "CRE_REJECTED": "CRE rejeté",
     "ME_GENERATED": "ME généré",
-    "STATUS": "Statut"
+    "STATUS": "Statut",
+    "CRE_TYPE": "TYPE CRE",
+    "COD_APP": "CODE APP",
+    "BATCHID": "ID BATCH",
+    "ID_CRE": "ID CRE",
+    "CODE_ERREUR": "CODE ERREUR",
+    "TEXTE_ERREUR": "TEXTE ERREUR",
+    "NBR_RECYCLAGE": "NBR RECYCLAGE",
+    "DAR_DATE": "DATE DAR",
+    "DAR_TIME": "HEURE DAR",
+    "COD_LOT": "COD LOT",
+    "COD_AGENCE": "COD AGENCE",
+    "DAT_OPERAT": "DAT OPERAT",
+    "DEVISE_OP": "DEVISE OP",
+    "MNT_OPERAT": "MNT OPERAT",
+    "CODE_RECYCLAGE": "CODE RECYCLAGE",
+    "CODE_PHASE": "CODE PHASE",
+    "CODE_DOMAINE": "CODE DOMAINE",
+    "TEXTE_COMP_ERREUR": "TEXTE COMP ERREUR",
+    "EMETTEUR": "EMETTEUR",
+    "NUM_CRE_ERR": "NUM CRE ERR",
+    "CODE_CRE": "CODE CRE",
+    "VERSION_CRE": "VERSION CRE",
+    "CODE_INSTANCE": "CODE INSTANCE",
+    "NUM_ANO": "NUM ANO",
+    "TYP_ANO": "TYP ANO",
+    "NIV_GENE": "NIV GENE",
+    "ORIGINE_ANO": "ORIGINE ANO",
+    "IND_ENREG_CRE": "IND ENREG CRE",
+    "CODE_ENREG": "CODE ENREG",
+    "TYPE_REGLE": "TYPE REGLE",
+    "CODE_REGLE_ENREG": "CODE REGLE ENREG",
+    "DEB_VERSION_REGLE_ENREG": "DEB VERSION REGLE ENREG",
+    "FIN_VERSION_REGLE_ENREG": "FIN VERSION REGLE ENREG",
+    "CODE_REGLE_ME": "CODE REGLE ME",
+    "DEB_VERSION_REGLE_ME": "DEB VERSION REGLE ME",
+    "FIN_VERSION_REGLE_ME": "FIN VERSION REGLE ME",
+    "CODE": "CODE",
+    "IDF_VACATION": "IDF VACATION",
+    "IDF_ETAPE": "IDF ETAPE",
+    "DATE_VACATION": "DATE VACATION",
+    "HEURE_VACATION": "HEURE VACATION",
+    "LOT": "LOT",
+    "NIV_DETECT": "NIV DETECT",
+    "CODE_PRIO_SCHEMA": "CODE PRIO SCHEMA",
+    "CODE_SCHEMA": "CODE SCHEMA",
+    "NUM_SEQ_GARN": "NUM SEQ GARN",
+    "ADR_GARN": "ADR GARN",
+    "CODE_FORMAT_ME": "CODE FORMAT ME",
+    "MNEMO_MODULE": "MNEMO MODULE",
+    "CODE_ETAT_AUTOM": "CODE ETAT AUTOM",
+    "LG_ENREG": "LG ENREG",
+    "ENREG": "ENREG"
   },
   "STATUS": {
     "TRAITE_COMPLETEMENT": "Traité complètement",
@@ -30,6 +83,7 @@
   },
   "LAYOUT": {
     "DASHBOARD": "Tableau de Bord",
+    "STOCK_REJETS": "Stock Rejets",
     "IMPORT_DATA": "Importer des Données",
     "LOGOUT": "Déconnexion"
   },
@@ -45,5 +99,9 @@
     "PROCESSING": "Traitement en cours...",
     "CLEAR_DB": "Effacer les données",
     "CLEAR_DESC": "Effacer tous les enregistrements incorrects extraits dans la base de données."
+  },
+  "STOCK_REJETS": {
+    "TITLE": "Données des Stock Rejets",
+    "SEARCH_PLACEHOLDER": "Chercher par ID Batch, ID CRE, Code Erreur, ou Texte..."
   }
 }

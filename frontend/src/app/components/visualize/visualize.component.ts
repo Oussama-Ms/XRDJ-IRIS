@@ -21,10 +21,10 @@ export class VisualizeComponent implements OnInit {
   protected apiService = inject(ApiService);
   public translate = inject(TranslateService);
   private datePipe = inject(DatePipe);
-  
+
   treatments: AccountingTreatment[] = [];
   filteredTreatments: AccountingTreatment[] = [];
-  
+
   // Pagination
   currentPage: number = 1;
   pageSize: number = 5;
@@ -34,7 +34,7 @@ export class VisualizeComponent implements OnInit {
   endDate: string = '';
   selectedFluxName: string = '';
   fluxNames: string[] = [];
-  
+
   // Pie chart
   public pieChartOptions: ChartConfiguration['options'] = {
     responsive: true,
@@ -64,18 +64,23 @@ export class VisualizeComponent implements OnInit {
     this.apiService.getTreatments().subscribe(data => {
       this.treatments = data;
       this.filteredTreatments = [...this.treatments];
-      this.fluxNames = [...new Set(data.map(t => t.typeFlux))];
+      this.fluxNames = ['CRE', 'EC'];
       this.updateBarChart(this.filteredTreatments);
     });
 
     this.apiService.getRejectionsSummary().subscribe(data => {
-      this.availableFluxTypes = Object.keys(data);
+      this.availableFluxTypes = ['CRE', 'EC'];
       this.availableFluxTypes.forEach(ft => {
         if (this.selectedFluxTypes[ft] === undefined) {
           this.selectedFluxTypes[ft] = true;
         }
       });
-      this.updatePieChart(data);
+      // Ensure data has 0 values if missing, so pie chart renders them if they have 0
+      const completeData = {
+        'CRE': data['CRE'] || 0,
+        'EC': data['EC'] || 0
+      };
+      this.updatePieChart(completeData);
     });
   }
 
@@ -100,7 +105,7 @@ export class VisualizeComponent implements OnInit {
     this.filteredTreatments = this.treatments.filter(t => {
       let match = true;
       const tDate = new Date(t.dateTraitement);
-      
+
       if (this.startDate) {
         const start = new Date(this.startDate);
         if (tDate < start) match = false;
@@ -112,7 +117,7 @@ export class VisualizeComponent implements OnInit {
         if (tDate > end) match = false;
       }
       if (this.selectedFluxName && this.selectedFluxName !== '') {
-        if (t.typeFlux !== this.selectedFluxName) match = false;
+        if (t.nomApplication !== this.selectedFluxName) match = false;
       }
       return match;
     });
@@ -121,10 +126,10 @@ export class VisualizeComponent implements OnInit {
     this.updateBarChart(this.filteredTreatments);
 
     // Filter pie chart dynamically based on visible items
-    const rejectionsByFlux: { [key: string]: number } = {};
+    const rejectionsByFlux: { [key: string]: number } = { 'CRE': 0, 'EC': 0 };
     this.filteredTreatments.forEach(t => {
-        if (!rejectionsByFlux[t.typeFlux]) rejectionsByFlux[t.typeFlux] = 0;
-        rejectionsByFlux[t.typeFlux] += t.nbCreRejetes;
+      if (rejectionsByFlux[t.nomApplication] === undefined) rejectionsByFlux[t.nomApplication] = 0;
+      rejectionsByFlux[t.nomApplication] += t.nbCreRejetes;
     });
     this.updatePieChart(rejectionsByFlux);
   }
@@ -156,7 +161,7 @@ export class VisualizeComponent implements OnInit {
         values.push(data[key]);
       }
     }
-    
+
     this.pieChartData = {
       labels: labels,
       datasets: [{
@@ -175,46 +180,10 @@ export class VisualizeComponent implements OnInit {
     this.updateBarChart(this.filteredTreatments);
   }
 
-  exportCSV() {
-    this.translate.get(['TABLE.DATE', 'TABLE.TIME', 'TABLE.FLUX_NAME', 'TABLE.CRE_FILE', 'TABLE.CRE_RECEIVED', 'TABLE.CRE_TREATED', 'TABLE.CRE_REJECTED', 'TABLE.ME_GENERATED', 'TABLE.STATUS']).subscribe(headers => {
-      const headerRow = [
-        headers['TABLE.DATE'], headers['TABLE.TIME'], headers['TABLE.FLUX_NAME'], headers['TABLE.CRE_FILE'],
-        headers['TABLE.CRE_RECEIVED'], headers['TABLE.CRE_TREATED'], headers['TABLE.CRE_REJECTED'],
-        headers['TABLE.ME_GENERATED'], headers['TABLE.STATUS']
-      ].join(';');
-
-      const csvData = this.filteredTreatments.map(t => {
-        return [
-          this.datePipe.transform(t.dateTraitement, 'dd/MM/yyyy'),
-          this.datePipe.transform(t.dateTraitement, 'HH:mm:ss'),
-          t.nomApplication,
-          t.typeFlux,
-          t.nbCreRecus,
-          t.nbCreTraites,
-          t.nbCreRejetes,
-          t.nbMeGeneres,
-          this.translate.instant('STATUS.' + (
-            t.statut === 'Traité complètement' ? 'TRAITE_COMPLETEMENT' :
-            t.statut === 'Rejeté partiellement' ? 'REJETE_PARTIELLEMENT' :
-            t.statut === 'Rejeté complètement' ? 'REJETE_COMPLETEMENT' : ''
-          )) || t.statut
-        ].join(';');
-      });
-
-      const blob = new Blob([headerRow + '\\n' + csvData.join('\\n')], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.setAttribute('download', 'export_macro.csv');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    });
-  }
-
   exportPDF() {
     this.translate.get(['DASHBOARD.MACRO_TABLE', 'TABLE.DATE', 'TABLE.TIME', 'TABLE.FLUX_NAME', 'TABLE.CRE_FILE', 'TABLE.CRE_RECEIVED', 'TABLE.CRE_TREATED', 'TABLE.CRE_REJECTED', 'TABLE.ME_GENERATED', 'TABLE.STATUS']).subscribe(res => {
       const doc = new jsPDF('landscape');
-      
+
       const head = [[
         res['TABLE.DATE'], res['TABLE.TIME'], res['TABLE.FLUX_NAME'], res['TABLE.CRE_FILE'],
         res['TABLE.CRE_RECEIVED'], res['TABLE.CRE_TREATED'], res['TABLE.CRE_REJECTED'],
@@ -232,8 +201,8 @@ export class VisualizeComponent implements OnInit {
         t.nbMeGeneres.toString(),
         this.translate.instant('STATUS.' + (
           t.statut === 'Traité complètement' ? 'TRAITE_COMPLETEMENT' :
-          t.statut === 'Rejeté partiellement' ? 'REJETE_PARTIELLEMENT' :
-          t.statut === 'Rejeté complètement' ? 'REJETE_COMPLETEMENT' : ''
+            t.statut === 'Rejeté partiellement' ? 'REJETE_PARTIELLEMENT' :
+              t.statut === 'Rejeté complètement' ? 'REJETE_COMPLETEMENT' : ''
         )) || t.statut
       ]);
 
@@ -246,8 +215,41 @@ export class VisualizeComponent implements OnInit {
         styles: { fontSize: 8 },
         headStyles: { fillColor: [59, 130, 246] }
       });
-      
+
       doc.save('export_macro.pdf');
+    });
+  }
+
+  exportExcel() {
+    this.translate.get(['TABLE.DATE', 'TABLE.TIME', 'TABLE.FLUX_NAME', 'TABLE.CRE_FILE', 'TABLE.CRE_RECEIVED', 'TABLE.CRE_TREATED', 'TABLE.CRE_REJECTED', 'TABLE.ME_GENERATED', 'TABLE.STATUS']).subscribe(res => {
+      const headers = [
+        res['TABLE.DATE'], res['TABLE.TIME'], res['TABLE.FLUX_NAME'], res['TABLE.CRE_FILE'],
+        res['TABLE.CRE_RECEIVED'], res['TABLE.CRE_TREATED'], res['TABLE.CRE_REJECTED'],
+        res['TABLE.ME_GENERATED'], res['TABLE.STATUS']
+      ];
+
+      const data = this.filteredTreatments.map(t => [
+        this.datePipe.transform(t.dateTraitement, 'dd/MM/yyyy'),
+        this.datePipe.transform(t.dateTraitement, 'HH:mm:ss'),
+        t.nomApplication,
+        t.typeFlux,
+        t.nbCreRecus,
+        t.nbCreTraites,
+        t.nbCreRejetes,
+        t.nbMeGeneres,
+        this.translate.instant('STATUS.' + (
+          t.statut === 'Traité complètement' ? 'TRAITE_COMPLETEMENT' :
+          t.statut === 'Rejeté partiellement' ? 'REJETE_PARTIELLEMENT' :
+          t.statut === 'Rejeté complètement' ? 'REJETE_COMPLETEMENT' : ''
+        )) || t.statut
+      ]);
+
+      import('xlsx').then(XLSX => {
+        const sheet = XLSX.utils.aoa_to_sheet([headers, ...data]);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, sheet, 'Macro Treatments');
+        XLSX.writeFile(wb, 'export_macro.xlsx');
+      });
     });
   }
 }

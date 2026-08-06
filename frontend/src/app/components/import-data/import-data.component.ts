@@ -36,10 +36,12 @@ export class ImportDataComponent implements OnInit {
   }
 
   clearData() {
-    this.apiService.clearData().subscribe(() => {
-      this.successMsg = 'Database data cleared successfully.';
-      this.loadHealth();
-      setTimeout(() => this.successMsg = '', 3000);
-    });
+    if (window.confirm('Are you sure you want to clear all database data? This action cannot be undone.')) {
+      this.apiService.clearData().subscribe(() => {
+        this.successMsg = 'Database data cleared successfully.';
+        this.loadHealth();
+        setTimeout(() => this.successMsg = '', 3000);
+      });
+    }
   }
 }

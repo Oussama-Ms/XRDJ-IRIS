@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { AccountingTreatment } from '../models/treatment.model';
 import { SystemHealth } from '../models/system-health.model';
+import { AnomalyRecord } from '../models/anomaly-record.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,10 @@ export class ApiService {
 
   getRejectionsSummary(): Observable<{[key: string]: number}> {
     return this.http.get<{[key: string]: number}>(`${this.apiUrl}/dashboard/rejections-summary`);
+  }
+
+  getAnomalies(): Observable<AnomalyRecord[]> {
+    return this.http.get<AnomalyRecord[]>(`${this.apiUrl}/dashboard/anomalies`);
   }
 
   // Admin endpoints
