@@ -1,0 +1,43 @@
+<div class="chat-widget-container">
+  <!-- Chat Button -->
+  <button class="chat-toggle-btn" (click)="toggleChat()">
+    <span *ngIf="!isOpen">💬</span>
+    <span *ngIf="isOpen">✖</span>
+  </button>
+
+  <!-- Chat Window -->
+  <div class="chat-window" *ngIf="isOpen">
+    <div class="chat-header">
+      <h4>AI Data Assistant</h4>
+    </div>
+
+    <div class="chat-body">
+      <ng-container *ngFor="let msg of messages">
+        <div *ngIf="msg.text" [ngClass]="{'message-user': msg.sender === 'user', 'message-agent': msg.sender === 'agent'}">
+          <div class="message-bubble" [innerHTML]="formatMessage(msg.text)"></div>
+        </div>
+      </ng-container>
+      
+      <div *ngIf="isLoading" class="message-agent">
+        <div class="message-bubble loading-dots">
+          <span>.</span><span>.</span><span>.</span>
+        </div>
+      </div>
+      
+      <div class="premade-questions" *ngIf="availableQuestions.length > 0">
+        <button *ngFor="let q of availableQuestions" class="question-chip" (click)="askPremade(q)">
+          {{ q }}
+        </button>
+      </div>
+    </div>
+
+    <div class="chat-footer">
+      <input type="text" 
+             [(ngModel)]="userInput" 
+             (keyup.enter)="sendMessage()" 
+             placeholder="Ask about data metrics..." 
+             [disabled]="isLoading">
+      <button (click)="sendMessage()" [disabled]="isLoading || !userInput.trim()">Send</button>
+    </div>
+  </div>
+</div>

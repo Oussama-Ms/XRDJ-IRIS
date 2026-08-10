@@ -95,11 +95,19 @@
   </div>
 
   <div class="card chart-card">
-    <div style="display: flex; justify-content: space-between; width: 100%;">
+    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
       <h3>{{ 'DASHBOARD.TREATMENT_HISTORY' | translate }}</h3>
-      <button class="btn btn-icon btn-pdf" (click)="exportPDF()" title="{{ 'DASHBOARD.EXPORT_PDF' | translate }}">
-        <i class="fa-solid fa-file-pdf"></i>
-      </button>
+      <div style="display: flex; gap: 16px; align-items: center;">
+        <label class="checkbox-label" style="margin: 0;">
+          <input type="checkbox" [(ngModel)]="showCRE" (change)="onBarChartFilterChange()" /> CRE
+        </label>
+        <label class="checkbox-label" style="margin: 0;">
+          <input type="checkbox" [(ngModel)]="showEC" (change)="onBarChartFilterChange()" /> EC
+        </label>
+        <button class="btn btn-icon btn-pdf" (click)="exportPDF()" title="{{ 'DASHBOARD.EXPORT_PDF' | translate }}">
+          <i class="fa-solid fa-file-pdf"></i>
+        </button>
+      </div>
     </div>
     <div class="chart-wrapper">
       <canvas baseChart [data]="barChartData" [options]="barChartOptions" [type]="barChartType"></canvas>

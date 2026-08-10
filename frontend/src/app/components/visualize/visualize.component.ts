@@ -134,19 +134,32 @@ export class VisualizeComponent implements OnInit {
     this.updatePieChart(rejectionsByFlux);
   }
 
-  updateBarChart(data: AccountingTreatment[]) {
-    const dates = [...new Set(data.map(t => new Date(t.dateTraitement).toLocaleDateString()))];
-    const traites = dates.map(d => data.filter(t => new Date(t.dateTraitement).toLocaleDateString() === d).reduce((sum, t) => sum + t.nbCreTraites, 0));
-    const rejetes = dates.map(d => data.filter(t => new Date(t.dateTraitement).toLocaleDateString() === d).reduce((sum, t) => sum + t.nbCreRejetes, 0));
-    const recus = dates.map(d => data.filter(t => new Date(t.dateTraitement).toLocaleDateString() === d).reduce((sum, t) => sum + t.nbCreRecus, 0));
+  showCRE = true;
+  showEC = true;
 
-    this.translate.get(['TABLE.CRE_RECEIVED', 'TABLE.CRE_TREATED', 'TABLE.CRE_REJECTED']).subscribe(res => {
+  onBarChartFilterChange() {
+    this.updateBarChart(this.filteredTreatments);
+  }
+
+  updateBarChart(data: AccountingTreatment[]) {
+    const chartData = data.filter(t => {
+      if (t.nomApplication === 'CRE' && !this.showCRE) return false;
+      if (t.nomApplication === 'EC' && !this.showEC) return false;
+      return true;
+    });
+
+    const dates = [...new Set(chartData.map(t => new Date(t.dateTraitement).toLocaleDateString()))];
+    const traites = dates.map(d => chartData.filter(t => new Date(t.dateTraitement).toLocaleDateString() === d).reduce((sum, t) => sum + t.nbCreTraites, 0));
+    const rejetes = dates.map(d => chartData.filter(t => new Date(t.dateTraitement).toLocaleDateString() === d).reduce((sum, t) => sum + t.nbCreRejetes, 0));
+    const recus = dates.map(d => chartData.filter(t => new Date(t.dateTraitement).toLocaleDateString() === d).reduce((sum, t) => sum + t.nbCreRecus, 0));
+
+    this.translate.get(['TABLE.RECEIVED', 'TABLE.TREATED', 'TABLE.REJECTED']).subscribe(res => {
       this.barChartData = {
         labels: dates,
         datasets: [
-          { data: recus, label: res['TABLE.CRE_RECEIVED'] || 'CRE Reçu', backgroundColor: '#93c5fd' },
-          { data: traites, label: res['TABLE.CRE_TREATED'] || 'CRE Traité', backgroundColor: '#86efac' },
-          { data: rejetes, label: res['TABLE.CRE_REJECTED'] || 'CRE Rejeté', backgroundColor: '#fde047' }
+          { data: recus, label: res['TABLE.RECEIVED'] || 'Reçu', backgroundColor: '#93c5fd' },
+          { data: traites, label: res['TABLE.TREATED'] || 'Traité', backgroundColor: '#86efac' },
+          { data: rejetes, label: res['TABLE.REJECTED'] || 'Rejeté', backgroundColor: '#fde047' }
         ]
       };
     });

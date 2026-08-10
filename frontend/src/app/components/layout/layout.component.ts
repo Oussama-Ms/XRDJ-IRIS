@@ -4,13 +4,14 @@ import { AuthService } from '../../services/auth.service';
 import { WebSocketService } from '../../services/websocket.service';
 import { CommonModule } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
+import { ChatWidgetComponent } from '../chat-widget/chat-widget.component';
 import { OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule, TranslateModule],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule, TranslateModule, ChatWidgetComponent],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.css'
 })
