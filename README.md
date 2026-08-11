@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://img.icons8.com/?size=100&id=40253&format=png&color=000000" alt="IRIS Logo" width="100"/>
+  <img src="https://www.albaridbank.ma/themes/baridbank/logo.png" alt="IRIS Logo" width="100"/>
   <h1>XRDJ-IRIS</h1>
   <p><b>Intelligent Banking Data Assistant & Metrics Dashboard</b></p>
 </div>
