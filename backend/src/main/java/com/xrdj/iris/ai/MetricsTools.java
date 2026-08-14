@@ -13,7 +13,10 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import org.springframework.cache.annotation.Cacheable;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Configuration
 public class MetricsTools {
 
@@ -32,7 +35,7 @@ public class MetricsTools {
     @Description("Gets the total number of rejected CREs (Compte Rendu d'Evénement) treated TODAY in the database for a given banking flow type (e.g., 'Dotation', 'Virement').")
     public Function<MetricsRequest, MetricsResponse> getRejectedCREsToday() {
         return request -> {
-            System.out.println("Function Called: getRejectedCREsToday for flow: " + request.flowType());
+            log.info("Function Called: getRejectedCREsToday for flow: {}", request.flowType());
             
             // Get all files ingested TODAY
             LocalDate today = LocalDate.now();
@@ -63,11 +66,12 @@ public class MetricsTools {
                 })
                 .sum();
             
-            System.out.println("Database calculated " + totalRejected + " rejections for " + request.flowType() + " today.");
+            log.info("Database calculated {} rejections for {} today.", totalRejected, request.flowType());
             return new MetricsResponse(totalRejected);
         };
     }
 
+    @Cacheable(value = "metrics", key = "#targetDate != null ? #targetDate.toString() : 'today'")
     public String getMetricsSummaryForDate(LocalDate targetDate) {
         if (targetDate == null) {
             targetDate = LocalDate.now();
@@ -105,6 +109,7 @@ public class MetricsTools {
         );
     }
 
+    @Cacheable(value = "metrics", key = "'all-time'")
     public String getAllTimeMetricsSummary() {
         List<RuleCounterRecord> records = repository.findAll();
             

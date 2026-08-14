@@ -7,7 +7,9 @@ import org.springframework.ai.chat.memory.InMemoryChatMemory;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.AbstractChatMemoryAdvisor;
 import org.springframework.web.bind.annotation.*;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/chat")
 public class ChatController {
@@ -57,6 +59,7 @@ public class ChatController {
 
     @PostMapping
     public ChatResponse chat(@RequestBody ChatRequest request) {
+        log.info("Received chat prompt: {}", request.prompt());
         String chatId = request.chatId() != null ? request.chatId() : "default";
         String responseContent = chatClient.prompt()
                 .user(buildPromptWithContext(request.prompt()))
@@ -69,6 +72,7 @@ public class ChatController {
 
     @PostMapping(value = "/stream", produces = org.springframework.http.MediaType.TEXT_EVENT_STREAM_VALUE)
     public reactor.core.publisher.Flux<String> chatStream(@RequestBody ChatRequest request) {
+        log.info("Received streaming chat prompt: {}", request.prompt());
         String chatId = request.chatId() != null ? request.chatId() : "default";
         return chatClient.prompt()
                 .user(buildPromptWithContext(request.prompt()))

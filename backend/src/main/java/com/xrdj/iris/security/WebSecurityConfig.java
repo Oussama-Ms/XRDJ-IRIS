@@ -53,7 +53,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.cors(cors -> cors.configurationSource(request -> {
             var corsConfig = new CorsConfiguration();
-            corsConfig.setAllowedOrigins(List.of("http://localhost:4200"));
+            corsConfig.setAllowedOrigins(List.of("http://localhost:4200", "http://localhost"));
             corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
             corsConfig.setAllowedHeaders(List.of("*"));
             return corsConfig;
