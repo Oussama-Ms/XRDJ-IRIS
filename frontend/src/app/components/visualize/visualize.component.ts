@@ -38,16 +38,19 @@ export class VisualizeComponent implements OnInit {
   // Pie chart
   public pieChartOptions: ChartConfiguration['options'] = {
     responsive: true,
-    plugins: { legend: { display: false } }, // the image has legend on left, custom legend maybe, but I will put it false or top
+    plugins: { legend: { display: false } } // the image has legend on left, custom legend maybe, but I will put it false or top
   };
-  public pieChartData: ChartData<'pie', number[], string | string[]> = { labels: [], datasets: [{ data: [] }] };
+  public pieChartData: ChartData<'pie', number[], string | string[]> = {
+    labels: [],
+    datasets: [{ data: [] }]
+  };
   public pieChartType: ChartType = 'pie';
 
   // Bar chart
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
     scales: { x: {}, y: { beginAtZero: true } },
-    plugins: { legend: { display: true, position: 'top' } },
+    plugins: { legend: { display: true, position: 'top' } }
   };
   public barChartType: ChartType = 'bar';
   public barChartData: ChartData<'bar'> = { labels: [], datasets: [] };
@@ -61,24 +64,24 @@ export class VisualizeComponent implements OnInit {
   }
 
   loadData(): void {
-    this.apiService.getTreatments().subscribe(data => {
+    this.apiService.getTreatments().subscribe((data) => {
       this.treatments = data;
       this.filteredTreatments = [...this.treatments];
       this.fluxNames = ['CRE', 'EC'];
       this.updateBarChart(this.filteredTreatments);
     });
 
-    this.apiService.getRejectionsSummary().subscribe(data => {
+    this.apiService.getRejectionsSummary().subscribe((data) => {
       this.availableFluxTypes = ['CRE', 'EC'];
-      this.availableFluxTypes.forEach(ft => {
+      this.availableFluxTypes.forEach((ft) => {
         if (this.selectedFluxTypes[ft] === undefined) {
           this.selectedFluxTypes[ft] = true;
         }
       });
       // Ensure data has 0 values if missing, so pie chart renders them if they have 0
       const completeData = {
-        'CRE': data['CRE'] || 0,
-        'EC': data['EC'] || 0
+        CRE: data['CRE'] || 0,
+        EC: data['EC'] || 0
       };
       this.updatePieChart(completeData);
     });
@@ -102,7 +105,7 @@ export class VisualizeComponent implements OnInit {
   }
 
   applyFilters() {
-    this.filteredTreatments = this.treatments.filter(t => {
+    this.filteredTreatments = this.treatments.filter((t) => {
       let match = true;
       const tDate = new Date(t.dateTraitement);
 
@@ -126,8 +129,8 @@ export class VisualizeComponent implements OnInit {
     this.updateBarChart(this.filteredTreatments);
 
     // Filter pie chart dynamically based on visible items
-    const rejectionsByFlux: { [key: string]: number } = { 'CRE': 0, 'EC': 0 };
-    this.filteredTreatments.forEach(t => {
+    const rejectionsByFlux: { [key: string]: number } = { CRE: 0, EC: 0 };
+    this.filteredTreatments.forEach((t) => {
       if (rejectionsByFlux[t.nomApplication] === undefined) rejectionsByFlux[t.nomApplication] = 0;
       rejectionsByFlux[t.nomApplication] += t.nbCreRejetes;
     });
@@ -142,24 +145,38 @@ export class VisualizeComponent implements OnInit {
   }
 
   updateBarChart(data: AccountingTreatment[]) {
-    const chartData = data.filter(t => {
+    const chartData = data.filter((t) => {
       if (t.nomApplication === 'CRE' && !this.showCRE) return false;
       if (t.nomApplication === 'EC' && !this.showEC) return false;
       return true;
     });
 
-    const dates = [...new Set(chartData.map(t => new Date(t.dateTraitement).toLocaleDateString()))];
-    const traites = dates.map(d => chartData.filter(t => new Date(t.dateTraitement).toLocaleDateString() === d).reduce((sum, t) => sum + t.nbCreTraites, 0));
-    const rejetes = dates.map(d => chartData.filter(t => new Date(t.dateTraitement).toLocaleDateString() === d).reduce((sum, t) => sum + t.nbCreRejetes, 0));
-    const recus = dates.map(d => chartData.filter(t => new Date(t.dateTraitement).toLocaleDateString() === d).reduce((sum, t) => sum + t.nbCreRecus, 0));
+    const dates = [
+      ...new Set(chartData.map((t) => new Date(t.dateTraitement).toLocaleDateString()))
+    ];
+    const traites = dates.map((d) =>
+      chartData
+        .filter((t) => new Date(t.dateTraitement).toLocaleDateString() === d)
+        .reduce((sum, t) => sum + t.nbCreTraites, 0)
+    );
+    const rejetes = dates.map((d) =>
+      chartData
+        .filter((t) => new Date(t.dateTraitement).toLocaleDateString() === d)
+        .reduce((sum, t) => sum + t.nbCreRejetes, 0)
+    );
+    const recus = dates.map((d) =>
+      chartData
+        .filter((t) => new Date(t.dateTraitement).toLocaleDateString() === d)
+        .reduce((sum, t) => sum + t.nbCreRecus, 0)
+    );
 
-    this.translate.get(['TABLE.RECEIVED', 'TABLE.TREATED', 'TABLE.REJECTED']).subscribe(res => {
+    this.translate.get(['TABLE.RECEIVED', 'TABLE.TREATED', 'TABLE.REJECTED']).subscribe((res) => {
       this.barChartData = {
         labels: dates,
         datasets: [
-          { data: recus, label: res['TABLE.RECEIVED'] || 'Reçu', backgroundColor: '#93c5fd' },
-          { data: traites, label: res['TABLE.TREATED'] || 'Traité', backgroundColor: '#86efac' },
-          { data: rejetes, label: res['TABLE.REJECTED'] || 'Rejeté', backgroundColor: '#fde047' }
+          { data: recus, label: res['TABLE.RECEIVED'] || 'Reçu', backgroundColor: '#A29691' },
+          { data: traites, label: res['TABLE.TREATED'] || 'Traité', backgroundColor: '#FFD700' },
+          { data: rejetes, label: res['TABLE.REJECTED'] || 'Rejeté', backgroundColor: '#4E3F3A' }
         ]
       };
     });
@@ -177,10 +194,12 @@ export class VisualizeComponent implements OnInit {
 
     this.pieChartData = {
       labels: labels,
-      datasets: [{
-        data: values,
-        backgroundColor: ['#fde047', '#e879f9', '#93c5fd', '#86efac', '#fca5a5']
-      }]
+      datasets: [
+        {
+          data: values,
+          backgroundColor: ['#FFD700', '#4E3F3A', '#D9C8B4', '#8B7355', '#6B5B53']
+        }
+      ]
     };
   }
 
@@ -194,75 +213,124 @@ export class VisualizeComponent implements OnInit {
   }
 
   exportPDF() {
-    this.translate.get(['DASHBOARD.MACRO_TABLE', 'TABLE.DATE', 'TABLE.TIME', 'TABLE.FLUX_NAME', 'TABLE.CRE_FILE', 'TABLE.CRE_RECEIVED', 'TABLE.CRE_TREATED', 'TABLE.CRE_REJECTED', 'TABLE.ME_GENERATED', 'TABLE.STATUS']).subscribe(res => {
-      const doc = new jsPDF('landscape');
+    this.translate
+      .get([
+        'DASHBOARD.MACRO_TABLE',
+        'TABLE.DATE',
+        'TABLE.TIME',
+        'TABLE.FLUX_NAME',
+        'TABLE.CRE_FILE',
+        'TABLE.CRE_RECEIVED',
+        'TABLE.CRE_TREATED',
+        'TABLE.CRE_REJECTED',
+        'TABLE.ME_GENERATED',
+        'TABLE.STATUS'
+      ])
+      .subscribe((res) => {
+        const doc = new jsPDF('landscape');
 
-      const head = [[
-        res['TABLE.DATE'], res['TABLE.TIME'], res['TABLE.FLUX_NAME'], res['TABLE.CRE_FILE'],
-        res['TABLE.CRE_RECEIVED'], res['TABLE.CRE_TREATED'], res['TABLE.CRE_REJECTED'],
-        res['TABLE.ME_GENERATED'], res['TABLE.STATUS']
-      ]];
+        const head = [
+          [
+            res['TABLE.DATE'],
+            res['TABLE.TIME'],
+            res['TABLE.FLUX_NAME'],
+            res['TABLE.CRE_FILE'],
+            res['TABLE.CRE_RECEIVED'],
+            res['TABLE.CRE_TREATED'],
+            res['TABLE.CRE_REJECTED'],
+            res['TABLE.ME_GENERATED'],
+            res['TABLE.STATUS']
+          ]
+        ];
 
-      const body = this.filteredTreatments.map(t => [
-        this.datePipe.transform(t.dateTraitement, 'dd/MM/yyyy'),
-        this.datePipe.transform(t.dateTraitement, 'HH:mm:ss'),
-        t.nomApplication,
-        t.typeFlux,
-        t.nbCreRecus.toString(),
-        t.nbCreTraites.toString(),
-        t.nbCreRejetes.toString(),
-        t.nbMeGeneres.toString(),
-        this.translate.instant('STATUS.' + (
-          t.statut === 'Traité complètement' ? 'TRAITE_COMPLETEMENT' :
-            t.statut === 'Rejeté partiellement' ? 'REJETE_PARTIELLEMENT' :
-              t.statut === 'Rejeté complètement' ? 'REJETE_COMPLETEMENT' : ''
-        )) || t.statut
-      ]);
+        const body = this.filteredTreatments.map((t) => [
+          this.datePipe.transform(t.dateTraitement, 'dd/MM/yyyy'),
+          this.datePipe.transform(t.dateTraitement, 'HH:mm:ss'),
+          t.nomApplication,
+          t.typeFlux,
+          t.nbCreRecus.toString(),
+          t.nbCreTraites.toString(),
+          t.nbCreRejetes.toString(),
+          t.nbMeGeneres.toString(),
+          this.translate.instant(
+            'STATUS.' +
+              (t.statut === 'Traité complètement'
+                ? 'TRAITE_COMPLETEMENT'
+                : t.statut === 'Rejeté partiellement'
+                  ? 'REJETE_PARTIELLEMENT'
+                  : t.statut === 'Rejeté complètement'
+                    ? 'REJETE_COMPLETEMENT'
+                    : '')
+          ) || t.statut
+        ]);
 
-      doc.text(res['DASHBOARD.MACRO_TABLE'], 14, 15);
-      autoTable(doc, {
-        head: head,
-        body: body,
-        startY: 20,
-        theme: 'striped',
-        styles: { fontSize: 8 },
-        headStyles: { fillColor: [59, 130, 246] }
+        doc.text(res['DASHBOARD.MACRO_TABLE'], 14, 15);
+        autoTable(doc, {
+          head: head,
+          body: body,
+          startY: 20,
+          theme: 'striped',
+          styles: { fontSize: 8 },
+          headStyles: { fillColor: [78, 63, 58] } // #4E3F3A in RGB
+        });
+
+        doc.save('export_macro.pdf');
       });
-
-      doc.save('export_macro.pdf');
-    });
   }
 
   exportExcel() {
-    this.translate.get(['TABLE.DATE', 'TABLE.TIME', 'TABLE.FLUX_NAME', 'TABLE.CRE_FILE', 'TABLE.CRE_RECEIVED', 'TABLE.CRE_TREATED', 'TABLE.CRE_REJECTED', 'TABLE.ME_GENERATED', 'TABLE.STATUS']).subscribe(res => {
-      const headers = [
-        res['TABLE.DATE'], res['TABLE.TIME'], res['TABLE.FLUX_NAME'], res['TABLE.CRE_FILE'],
-        res['TABLE.CRE_RECEIVED'], res['TABLE.CRE_TREATED'], res['TABLE.CRE_REJECTED'],
-        res['TABLE.ME_GENERATED'], res['TABLE.STATUS']
-      ];
+    this.translate
+      .get([
+        'TABLE.DATE',
+        'TABLE.TIME',
+        'TABLE.FLUX_NAME',
+        'TABLE.CRE_FILE',
+        'TABLE.CRE_RECEIVED',
+        'TABLE.CRE_TREATED',
+        'TABLE.CRE_REJECTED',
+        'TABLE.ME_GENERATED',
+        'TABLE.STATUS'
+      ])
+      .subscribe((res) => {
+        const headers = [
+          res['TABLE.DATE'],
+          res['TABLE.TIME'],
+          res['TABLE.FLUX_NAME'],
+          res['TABLE.CRE_FILE'],
+          res['TABLE.CRE_RECEIVED'],
+          res['TABLE.CRE_TREATED'],
+          res['TABLE.CRE_REJECTED'],
+          res['TABLE.ME_GENERATED'],
+          res['TABLE.STATUS']
+        ];
 
-      const data = this.filteredTreatments.map(t => [
-        this.datePipe.transform(t.dateTraitement, 'dd/MM/yyyy'),
-        this.datePipe.transform(t.dateTraitement, 'HH:mm:ss'),
-        t.nomApplication,
-        t.typeFlux,
-        t.nbCreRecus,
-        t.nbCreTraites,
-        t.nbCreRejetes,
-        t.nbMeGeneres,
-        this.translate.instant('STATUS.' + (
-          t.statut === 'Traité complètement' ? 'TRAITE_COMPLETEMENT' :
-          t.statut === 'Rejeté partiellement' ? 'REJETE_PARTIELLEMENT' :
-          t.statut === 'Rejeté complètement' ? 'REJETE_COMPLETEMENT' : ''
-        )) || t.statut
-      ]);
+        const data = this.filteredTreatments.map((t) => [
+          this.datePipe.transform(t.dateTraitement, 'dd/MM/yyyy'),
+          this.datePipe.transform(t.dateTraitement, 'HH:mm:ss'),
+          t.nomApplication,
+          t.typeFlux,
+          t.nbCreRecus,
+          t.nbCreTraites,
+          t.nbCreRejetes,
+          t.nbMeGeneres,
+          this.translate.instant(
+            'STATUS.' +
+              (t.statut === 'Traité complètement'
+                ? 'TRAITE_COMPLETEMENT'
+                : t.statut === 'Rejeté partiellement'
+                  ? 'REJETE_PARTIELLEMENT'
+                  : t.statut === 'Rejeté complètement'
+                    ? 'REJETE_COMPLETEMENT'
+                    : '')
+          ) || t.statut
+        ]);
 
-      import('xlsx').then(XLSX => {
-        const sheet = XLSX.utils.aoa_to_sheet([headers, ...data]);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, sheet, 'Macro Treatments');
-        XLSX.writeFile(wb, 'export_macro.xlsx');
+        import('xlsx').then((XLSX) => {
+          const sheet = XLSX.utils.aoa_to_sheet([headers, ...data]);
+          const wb = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(wb, sheet, 'Macro Treatments');
+          XLSX.writeFile(wb, 'export_macro.xlsx');
+        });
       });
-    });
   }
 }

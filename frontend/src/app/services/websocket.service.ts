@@ -19,7 +19,7 @@ export class WebSocketService {
       },
       reconnectDelay: 5000,
       heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
+      heartbeatOutgoing: 4000
     });
 
     this.client.onConnect = (frame) => {

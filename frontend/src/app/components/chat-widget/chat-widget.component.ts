@@ -27,14 +27,14 @@ export class ChatWidgetComponent {
     'How many transactions were done today?',
     'How many transactions were rejected today?',
     'How many transactions were treated correctly?',
-    'Give me a full breakdown of today\'s metrics.',
+    "Give me a full breakdown of today's metrics.",
     'Were there more CRE or EC rejections today?'
   ];
-  
+
   usedQuestions = new Set<string>();
 
   get availableQuestions() {
-    return this.premadeQuestions.filter(q => !this.usedQuestions.has(q));
+    return this.premadeQuestions.filter((q) => !this.usedQuestions.has(q));
   }
 
   constructor(private chatService: ChatService) {}
@@ -67,10 +67,10 @@ export class ChatWidgetComponent {
     const prompt = this.userInput.trim();
     this.messages.push({ text: prompt, sender: 'user' });
     this.userInput = '';
-    
+
     const agentMessage: Message = { text: '', sender: 'agent' };
     this.messages.push(agentMessage);
-    
+
     this.isLoading = true;
 
     try {

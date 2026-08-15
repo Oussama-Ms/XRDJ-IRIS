@@ -23,8 +23,10 @@ public class AnomalyRecord {
     private String batchid;
     private String idCre;
     private String codeErreur;
+
     @Column(length = 1000)
     private String texteErreur;
+
     private String nbrRecyclage;
     private String darDate;
     private String darTime;
@@ -33,12 +35,16 @@ public class AnomalyRecord {
     private String datOperat;
     private String deviseOp;
     private String mntOperat;
+
     @Column(length = 1000)
     private String codeRecyclage;
+
     private String codePhase;
     private String codeDomaine;
+
     @Column(length = 1000)
     private String texteCompErreur;
+
     private String emetteur;
     private String numCreErr;
     private String codeCre;
@@ -72,9 +78,9 @@ public class AnomalyRecord {
     private String mnemoModule;
     private String codeEtatAutom;
     private String lgEnreg;
+
     @Column(length = 2000)
     private String enreg;
 
     private String fileName;
-
 }

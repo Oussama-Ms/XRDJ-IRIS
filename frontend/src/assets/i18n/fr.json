@@ -18,7 +18,10 @@
     "TIME": "Heure du traitement",
     "FLUX_NAME": "Nom du flux",
     "CRE_FILE": "Nom du fichier CRE",
-    "CRE_RECEIVED": "CRE reçu",
+    "RECEIVED": "Reçu",
+    "TREATED": "Traité",
+    "REJECTED": "Rejeté",
+    "CRE_RECEIVED": "CRE Reçus",
     "CRE_TREATED": "CRE traité",
     "CRE_REJECTED": "CRE rejeté",
     "ME_GENERATED": "ME généré",
@@ -85,6 +88,7 @@
     "DASHBOARD": "Tableau de Bord",
     "STOCK_REJETS": "Stock Rejets",
     "IMPORT_DATA": "Importer des Données",
+    "USERS": "Gestion des Utilisateurs",
     "LOGOUT": "Déconnexion"
   },
   "IMPORT": {
@@ -102,6 +106,22 @@
   },
   "STOCK_REJETS": {
     "TITLE": "Données des Stock Rejets",
-    "SEARCH_PLACEHOLDER": "Chercher par ID Batch, ID CRE, Code Erreur, ou Texte..."
+    "SEARCH_PLACEHOLDER": "Rechercher par Batch ID, ID CRE, Code Erreur, ou Texte..."
+  },
+  "USERS": {
+    "TITLE": "Gestion des Utilisateurs",
+    "ADD_USER": "Ajouter Utilisateur",
+    "EDIT_USER": "Modifier Utilisateur",
+    "ID": "ID",
+    "USERNAME": "Nom d'utilisateur",
+    "PASSWORD": "Mot de passe",
+    "PASSWORD_HINT": "Laissez vide pour conserver l'actuel",
+    "ROLE": "Rôle",
+    "ACTIONS": "Actions",
+    "EDIT": "Modifier",
+    "DELETE": "Supprimer",
+    "SAVE": "Enregistrer",
+    "CANCEL": "Annuler",
+    "YOU": "Vous"
   }
 }

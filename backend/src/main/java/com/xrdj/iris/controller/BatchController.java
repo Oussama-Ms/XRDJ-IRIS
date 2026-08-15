@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/batch")
 public class BatchController {
 
-    @Autowired
-    private JobLauncher jobLauncher;
+    @Autowired private JobLauncher jobLauncher;
 
     @Autowired
     @Qualifier("importAnomalyJob")
@@ -29,26 +28,30 @@ public class BatchController {
     @PostMapping("/run-anomalies")
     public ResponseEntity<String> runAnomalyBatch() {
         try {
-            JobParameters jobParameters = new JobParametersBuilder()
-                    .addLong("time", System.currentTimeMillis())
-                    .toJobParameters();
+            JobParameters jobParameters =
+                    new JobParametersBuilder()
+                            .addLong("time", System.currentTimeMillis())
+                            .toJobParameters();
             jobLauncher.run(importAnomalyJob, jobParameters);
             return ResponseEntity.ok("Anomaly extraction batch job has been invoked.");
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Failed to invoke batch job: " + e.getMessage());
+            return ResponseEntity.internalServerError()
+                    .body("Failed to invoke batch job: " + e.getMessage());
         }
     }
 
     @PostMapping("/run-rules")
     public ResponseEntity<String> runRuleCounterBatch() {
         try {
-            JobParameters jobParameters = new JobParametersBuilder()
-                    .addLong("time", System.currentTimeMillis())
-                    .toJobParameters();
+            JobParameters jobParameters =
+                    new JobParametersBuilder()
+                            .addLong("time", System.currentTimeMillis())
+                            .toJobParameters();
             jobLauncher.run(importRuleCounterJob, jobParameters);
             return ResponseEntity.ok("Rule Counter extraction batch job has been invoked.");
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Failed to invoke batch job: " + e.getMessage());
+            return ResponseEntity.internalServerError()
+                    .body("Failed to invoke batch job: " + e.getMessage());
         }
     }
 

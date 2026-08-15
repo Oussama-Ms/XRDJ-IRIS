@@ -22,7 +22,7 @@ export class ImportDataComponent implements OnInit {
   }
 
   loadHealth() {
-    this.apiService.getSystemHealth().subscribe(data => this.health = data);
+    this.apiService.getSystemHealth().subscribe((data) => (this.health = data));
   }
 
   triggerIngestion() {
@@ -31,16 +31,20 @@ export class ImportDataComponent implements OnInit {
       this.loading = false;
       this.successMsg = 'Manual ingestion triggered successfully.';
       this.loadHealth();
-      setTimeout(() => this.successMsg = '', 3000);
+      setTimeout(() => (this.successMsg = ''), 3000);
     });
   }
 
   clearData() {
-    if (window.confirm('Are you sure you want to clear all database data? This action cannot be undone.')) {
+    if (
+      window.confirm(
+        'Are you sure you want to clear all database data? This action cannot be undone.'
+      )
+    ) {
       this.apiService.clearData().subscribe(() => {
         this.successMsg = 'Database data cleared successfully.';
         this.loadHealth();
-        setTimeout(() => this.successMsg = '', 3000);
+        setTimeout(() => (this.successMsg = ''), 3000);
       });
     }
   }

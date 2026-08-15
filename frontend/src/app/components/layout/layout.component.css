@@ -6,7 +6,7 @@
 
 .sidebar {
   width: 260px;
-  background-color: #004b87;
+  background-color: #4e3f3a;
   color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -21,12 +21,12 @@
   align-items: center;
   justify-content: center;
   gap: 15px;
-  border-bottom: 1px solid #003366;
+  border-bottom: 1px solid #3a2e2a;
 }
 
 .logo {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  color: white;
+  background: #ffd700;
+  color: #4e3f3a;
   width: 40px;
   height: 40px;
   border-radius: 8px;
@@ -65,8 +65,8 @@
 }
 
 .nav-item:hover {
-  background-color: #003366;
-  color: white;
+  background-color: #3a2e2a;
+  color: #ffd700;
 }
 
 .nav-item.active {
@@ -77,7 +77,7 @@
 
 .user-profile {
   padding: 20px;
-  border-top: 1px solid #003366;
+  border-top: 1px solid #3a2e2a;
 }
 
 .user-info {
@@ -86,7 +86,7 @@
 
 .role {
   background-color: #ffd700;
-  color: #004b87;
+  color: #4e3f3a;
   padding: 4px 10px;
   border-radius: 12px;
   font-size: 0.75em;
@@ -111,7 +111,7 @@
 
 .logout-btn:hover {
   background-color: #ffd700;
-  color: #004b87;
+  color: #4e3f3a;
 }
 
 .main-content {
@@ -281,6 +281,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

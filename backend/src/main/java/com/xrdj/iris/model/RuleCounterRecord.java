@@ -35,5 +35,4 @@ public class RuleCounterRecord implements org.springframework.batch.item.Resourc
     private String creTraites;
     private String creRejetes;
     private String meGeneres;
-
 }

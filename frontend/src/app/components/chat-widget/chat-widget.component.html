@@ -1,8 +1,40 @@
 <div class="chat-widget-container">
   <!-- Chat Button -->
   <button class="chat-toggle-btn" (click)="toggleChat()">
-    <span *ngIf="!isOpen">💬</span>
-    <span *ngIf="isOpen">✖</span>
+    <svg
+      *ngIf="!isOpen"
+      xmlns="http://www.w3.org/2000/svg"
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M12 8V4H8"></path>
+      <rect width="16" height="12" x="4" y="8" rx="2"></rect>
+      <path d="M2 14h2"></path>
+      <path d="M20 14h2"></path>
+      <path d="M15 13v2"></path>
+      <path d="M9 13v2"></path>
+    </svg>
+    <svg
+      *ngIf="isOpen"
+      xmlns="http://www.w3.org/2000/svg"
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
   </button>
 
   <!-- Chat Window -->
@@ -13,17 +45,25 @@
 
     <div class="chat-body">
       <ng-container *ngFor="let msg of messages">
-        <div *ngIf="msg.text" [ngClass]="{'message-user': msg.sender === 'user', 'message-agent': msg.sender === 'agent'}">
+        <div
+          *ngIf="msg.text"
+          [ngClass]="{
+            'message-user': msg.sender === 'user',
+            'message-agent': msg.sender === 'agent'
+          }"
+        >
           <div class="message-bubble" [innerHTML]="formatMessage(msg.text)"></div>
         </div>
       </ng-container>
-      
+
       <div *ngIf="isLoading" class="message-agent">
         <div class="message-bubble loading-dots">
-          <span>.</span><span>.</span><span>.</span>
+          <span>.</span>
+          <span>.</span>
+          <span>.</span>
         </div>
       </div>
-      
+
       <div class="premade-questions" *ngIf="availableQuestions.length > 0">
         <button *ngFor="let q of availableQuestions" class="question-chip" (click)="askPremade(q)">
           {{ q }}
@@ -32,11 +72,13 @@
     </div>
 
     <div class="chat-footer">
-      <input type="text" 
-             [(ngModel)]="userInput" 
-             (keyup.enter)="sendMessage()" 
-             placeholder="Ask about data metrics..." 
-             [disabled]="isLoading">
+      <input
+        type="text"
+        [(ngModel)]="userInput"
+        (keyup.enter)="sendMessage()"
+        placeholder="Ask about data metrics..."
+        [disabled]="isLoading"
+      />
       <button (click)="sendMessage()" [disabled]="isLoading || !userInput.trim()">Send</button>
     </div>
   </div>

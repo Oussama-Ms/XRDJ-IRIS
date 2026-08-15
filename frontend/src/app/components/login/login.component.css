@@ -3,11 +3,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #004b87, #002244);
+  background:
+    radial-gradient(circle at top left, rgba(255, 215, 0, 0.15), transparent 50%),
+    radial-gradient(circle at bottom right, rgba(255, 215, 0, 0.1), transparent 50%),
+    linear-gradient(135deg, #4e3f3a, #201714);
   background-size: cover;
+  position: relative;
+}
+
+.particle-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
 }
 
 .login-glass-card {
+  z-index: 2;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -77,6 +91,7 @@ input:focus {
   outline: none;
   border-color: #ffd700;
   background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
 }
 
 input::placeholder {
@@ -87,7 +102,7 @@ input::placeholder {
   width: 100%;
   padding: 12px;
   background: #ffd700;
-  color: #004b87;
+  color: #4e3f3a;
   border: none;
   border-radius: 8px;
   font-size: 1em;
@@ -123,4 +138,9 @@ input::placeholder {
   color: #6b7280;
 }
 
-.bank-logo { max-width: 150px; height: auto; margin: 0 auto 15px auto; display: block; }
+.bank-logo {
+  max-width: 150px;
+  height: auto;
+  margin: 0 auto 15px auto;
+  display: block;
+}

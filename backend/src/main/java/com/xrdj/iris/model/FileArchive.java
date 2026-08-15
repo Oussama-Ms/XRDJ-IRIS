@@ -5,12 +5,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "file_archive")
@@ -25,10 +24,10 @@ public class FileArchive {
     private Long id;
 
     private String fileName;
-    
+
     private String fileType;
 
     private LocalDateTime ingestionDate;
-    
+
     private String status;
 }

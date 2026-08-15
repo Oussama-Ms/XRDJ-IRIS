@@ -15,7 +15,7 @@ export interface ChatResponse {
   providedIn: 'root'
 })
 export class ChatService {
-  private apiUrl = 'http://localhost:8080/api/chat'; 
+  private apiUrl = 'http://localhost:8080/api/chat';
   private chatId = crypto.randomUUID();
 
   constructor(private http: HttpClient) {}
@@ -56,14 +56,14 @@ export class ChatService {
     while (true) {
       const { done, value } = await reader.read();
       if (done) break;
-      
+
       buffer += decoder.decode(value, { stream: true });
-      
+
       let doubleNewlineIndex;
       while ((doubleNewlineIndex = buffer.indexOf('\n\n')) !== -1) {
         const eventData = buffer.substring(0, doubleNewlineIndex);
         buffer = buffer.substring(doubleNewlineIndex + 2);
-        
+
         const lines = eventData.split('\n');
         const dataLines = [];
         for (const line of lines) {
@@ -73,7 +73,7 @@ export class ChatService {
             dataLines.push(text);
           }
         }
-        
+
         if (dataLines.length > 0) {
           onChunk(dataLines.join('\n'));
         }

@@ -18,6 +18,9 @@
     "TIME": "Treatment Time",
     "FLUX_NAME": "Flux Name",
     "CRE_FILE": "CRE File Name",
+    "RECEIVED": "Received",
+    "TREATED": "Treated",
+    "REJECTED": "Rejected",
     "CRE_RECEIVED": "CRE Received",
     "CRE_TREATED": "CRE Treated",
     "CRE_REJECTED": "CRE Rejected",
@@ -85,6 +88,7 @@
     "DASHBOARD": "Dashboard",
     "STOCK_REJETS": "Stock Rejects",
     "IMPORT_DATA": "Import Data",
+    "USERS": "User Management",
     "LOGOUT": "Logout"
   },
   "IMPORT": {
@@ -103,5 +107,21 @@
   "STOCK_REJETS": {
     "TITLE": "Stock Rejects Data",
     "SEARCH_PLACEHOLDER": "Search by Batch ID, ID CRE, Error Code, or Text..."
+  },
+  "USERS": {
+    "TITLE": "User Management",
+    "ADD_USER": "Add User",
+    "EDIT_USER": "Edit User",
+    "ID": "ID",
+    "USERNAME": "Username",
+    "PASSWORD": "Password",
+    "PASSWORD_HINT": "Leave blank to keep current",
+    "ROLE": "Role",
+    "ACTIONS": "Actions",
+    "EDIT": "Edit",
+    "DELETE": "Delete",
+    "SAVE": "Save",
+    "CANCEL": "Cancel",
+    "YOU": "You"
   }
 }

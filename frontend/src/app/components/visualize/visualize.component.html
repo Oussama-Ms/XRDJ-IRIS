@@ -1,7 +1,13 @@
 <div class="dashboard-header">
   <div class="lang-toggle">
-    <button (click)="switchLang('en')"><i class="fa-solid fa-globe"></i> EN</button>
-    <button (click)="switchLang('fr')"><i class="fa-solid fa-globe"></i> FR</button>
+    <button (click)="switchLang('en')">
+      <i class="fa-solid fa-globe"></i>
+      EN
+    </button>
+    <button (click)="switchLang('fr')">
+      <i class="fa-solid fa-globe"></i>
+      FR
+    </button>
   </div>
 </div>
 
@@ -31,13 +37,23 @@
 <div class="dashboard-grid">
   <div class="card table-card">
     <div class="table-header">
-      <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-        <h3 style="margin: 0;">{{ 'DASHBOARD.MACRO_TABLE' | translate }}</h3>
-        <div class="export-buttons" style="display: flex; gap: 8px;">
-          <button class="btn btn-icon btn-pdf" (click)="exportPDF()" title="{{ 'DASHBOARD.EXPORT_PDF' | translate }}" style="display: flex; align-items: center; justify-content: center;">
+      <div style="display: flex; justify-content: space-between; align-items: center; width: 100%">
+        <h3 style="margin: 0">{{ 'DASHBOARD.MACRO_TABLE' | translate }}</h3>
+        <div class="export-buttons" style="display: flex; gap: 8px">
+          <button
+            class="btn btn-icon btn-pdf"
+            (click)="exportPDF()"
+            title="{{ 'DASHBOARD.EXPORT_PDF' | translate }}"
+            style="display: flex; align-items: center; justify-content: center"
+          >
             <i class="fa-solid fa-file-pdf"></i>
           </button>
-          <button class="btn btn-icon btn-excel" (click)="exportExcel()" title="Export Excel" style="display: flex; align-items: center; justify-content: center;">
+          <button
+            class="btn btn-icon btn-excel"
+            (click)="exportExcel()"
+            title="Export Excel"
+            style="display: flex; align-items: center; justify-content: center"
+          >
             <i class="fa-solid fa-file-excel"></i>
           </button>
         </div>
@@ -60,23 +76,34 @@
         </thead>
         <tbody>
           <tr *ngFor="let t of paginatedTreatments">
-            <td>{{ t.dateTraitement | date:'dd/MM/yyyy' }}</td>
-            <td>{{ t.dateTraitement | date:'HH:mm:ss' }}</td>
+            <td>{{ t.dateTraitement | date: 'dd/MM/yyyy' }}</td>
+            <td>{{ t.dateTraitement | date: 'HH:mm:ss' }}</td>
             <td>{{ t.nomApplication }}</td>
-            <td><span class="tag">{{ t.typeFlux }}</span></td>
-            <td style="color: #60a5fa;">{{ t.nbCreRecus }}</td>
-            <td style="color: #4ade80; font-weight: bold;">{{ t.nbCreTraites }}</td>
+            <td>
+              <span class="tag">{{ t.typeFlux }}</span>
+            </td>
+            <td style="color: #6b5b53">{{ t.nbCreRecus }}</td>
+            <td style="color: #4e3f3a; font-weight: bold">{{ t.nbCreTraites }}</td>
             <td [class.error-text]="t.nbCreRejetes > 0">{{ t.nbCreRejetes }}</td>
             <td>{{ t.nbMeGeneres }}</td>
             <td>
-              <span class="status-badge" [ngClass]="{
-                'status-success': t.statut === 'Traité complètement',
-                'status-warning': t.statut === 'Rejeté partiellement',
-                'status-error': t.statut === 'Rejeté complètement'
-              }">
-                {{ t.statut === 'Traité complètement' ? ('STATUS.TRAITE_COMPLETEMENT' | translate) : 
-                   t.statut === 'Rejeté partiellement' ? ('STATUS.REJETE_PARTIELLEMENT' | translate) : 
-                   t.statut === 'Rejeté complètement' ? ('STATUS.REJETE_COMPLETEMENT' | translate) : t.statut }}
+              <span
+                class="status-badge"
+                [ngClass]="{
+                  'status-success': t.statut === 'Traité complètement',
+                  'status-warning': t.statut === 'Rejeté partiellement',
+                  'status-error': t.statut === 'Rejeté complètement'
+                }"
+              >
+                {{
+                  t.statut === 'Traité complètement'
+                    ? ('STATUS.TRAITE_COMPLETEMENT' | translate)
+                    : t.statut === 'Rejeté partiellement'
+                      ? ('STATUS.REJETE_PARTIELLEMENT' | translate)
+                      : t.statut === 'Rejeté complètement'
+                        ? ('STATUS.REJETE_COMPLETEMENT' | translate)
+                        : t.statut
+                }}
               </span>
             </td>
           </tr>
@@ -85,39 +112,56 @@
     </div>
     <div class="pagination">
       <button class="btn btn-text" (click)="previousPage()" [disabled]="currentPage === 1">
-        <i class="fa-solid fa-arrow-left"></i> {{ 'DASHBOARD.PREVIOUS' | translate }}
+        <i class="fa-solid fa-arrow-left"></i>
+        {{ 'DASHBOARD.PREVIOUS' | translate }}
       </button>
       <span class="page-number">{{ currentPage }} / {{ totalPages }}</span>
       <button class="btn btn-text" (click)="nextPage()" [disabled]="currentPage >= totalPages">
-        {{ 'DASHBOARD.NEXT' | translate }} <i class="fa-solid fa-arrow-right"></i>
+        {{ 'DASHBOARD.NEXT' | translate }}
+        <i class="fa-solid fa-arrow-right"></i>
       </button>
     </div>
   </div>
 
   <div class="card chart-card">
-    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+    <div style="display: flex; justify-content: space-between; width: 100%; align-items: center">
       <h3>{{ 'DASHBOARD.TREATMENT_HISTORY' | translate }}</h3>
-      <div style="display: flex; gap: 16px; align-items: center;">
-        <label class="checkbox-label" style="margin: 0;">
-          <input type="checkbox" [(ngModel)]="showCRE" (change)="onBarChartFilterChange()" /> CRE
+      <div style="display: flex; gap: 16px; align-items: center">
+        <label class="checkbox-label" style="margin: 0">
+          <input type="checkbox" [(ngModel)]="showCRE" (change)="onBarChartFilterChange()" />
+          CRE
         </label>
-        <label class="checkbox-label" style="margin: 0;">
-          <input type="checkbox" [(ngModel)]="showEC" (change)="onBarChartFilterChange()" /> EC
+        <label class="checkbox-label" style="margin: 0">
+          <input type="checkbox" [(ngModel)]="showEC" (change)="onBarChartFilterChange()" />
+          EC
         </label>
-        <button class="btn btn-icon btn-pdf" (click)="exportPDF()" title="{{ 'DASHBOARD.EXPORT_PDF' | translate }}">
+        <button
+          class="btn btn-icon btn-pdf"
+          (click)="exportPDF()"
+          title="{{ 'DASHBOARD.EXPORT_PDF' | translate }}"
+        >
           <i class="fa-solid fa-file-pdf"></i>
         </button>
       </div>
     </div>
     <div class="chart-wrapper">
-      <canvas baseChart [data]="barChartData" [options]="barChartOptions" [type]="barChartType"></canvas>
+      <canvas
+        baseChart
+        [data]="barChartData"
+        [options]="barChartOptions"
+        [type]="barChartType"
+      ></canvas>
     </div>
   </div>
 
   <div class="card chart-card">
-    <div style="display: flex; justify-content: space-between; width: 100%;">
+    <div style="display: flex; justify-content: space-between; width: 100%">
       <h3>{{ 'DASHBOARD.REJECTS_TRACKING' | translate }}</h3>
-      <button class="btn btn-icon btn-pdf" (click)="exportPDF()" title="{{ 'DASHBOARD.EXPORT_PDF' | translate }}">
+      <button
+        class="btn btn-icon btn-pdf"
+        (click)="exportPDF()"
+        title="{{ 'DASHBOARD.EXPORT_PDF' | translate }}"
+      >
         <i class="fa-solid fa-file-pdf"></i>
       </button>
     </div>
@@ -128,7 +172,12 @@
       </label>
     </div>
     <div class="chart-wrapper pie-wrapper">
-      <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" [type]="pieChartType"></canvas>
+      <canvas
+        baseChart
+        [data]="pieChartData"
+        [options]="pieChartOptions"
+        [type]="pieChartType"
+      ></canvas>
     </div>
   </div>
 </div>

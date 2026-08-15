@@ -17,8 +17,8 @@ export class ApiService {
     return this.http.get<AccountingTreatment[]>(`${this.apiUrl}/dashboard/treatments`);
   }
 
-  getRejectionsSummary(): Observable<{[key: string]: number}> {
-    return this.http.get<{[key: string]: number}>(`${this.apiUrl}/dashboard/rejections-summary`);
+  getRejectionsSummary(): Observable<{ [key: string]: number }> {
+    return this.http.get<{ [key: string]: number }>(`${this.apiUrl}/dashboard/rejections-summary`);
   }
 
   getAnomalies(): Observable<AnomalyRecord[]> {

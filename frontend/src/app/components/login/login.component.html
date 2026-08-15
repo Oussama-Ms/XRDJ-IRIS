@@ -1,4 +1,5 @@
 <div class="login-wrapper">
+  <canvas #particleCanvas class="particle-canvas"></canvas>
   <div class="login-glass-card">
     <div class="login-header">
       <img src="assets/barid-bank-logo.png" alt="Barid Bank" class="bank-logo" />
@@ -13,7 +14,13 @@
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="input-group">
         <label for="username">Username</label>
-        <input id="username" type="text" formControlName="username" placeholder="admin or user" autocomplete="off" />
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+          placeholder="admin or user"
+          autocomplete="off"
+        />
       </div>
 
       <div class="input-group">
@@ -25,9 +32,5 @@
         {{ loading ? 'Authenticating...' : 'Sign In' }}
       </button>
     </form>
-
-    <div class="hint">
-      <small>Admin: admin / admin123 | User: user / user123</small>
-    </div>
   </div>
 </div>

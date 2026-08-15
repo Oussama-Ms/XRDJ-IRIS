@@ -9,7 +9,8 @@ import { routes } from './app.routes';
 import { authInterceptor } from './interceptors/auth.interceptor';
 
 export function HttpLoaderFactory(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+  // Add a cache-buster query parameter so the browser always fetches the latest translation file
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json?v=' + new Date().getTime());
 }
 
 export const appConfig: ApplicationConfig = {

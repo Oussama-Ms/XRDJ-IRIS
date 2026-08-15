@@ -21,19 +21,21 @@ public class DataSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         if (!userRepository.existsByUsername("admin")) {
-            userRepository.save(User.builder()
-                    .username("admin")
-                    .password(passwordEncoder.encode("admin123"))
-                    .role(Role.ROLE_ADMIN)
-                    .build());
+            userRepository.save(
+                    User.builder()
+                            .username("admin")
+                            .password(passwordEncoder.encode("admin123"))
+                            .role(Role.ROLE_ADMIN)
+                            .build());
         }
 
         if (!userRepository.existsByUsername("user")) {
-            userRepository.save(User.builder()
-                    .username("user")
-                    .password(passwordEncoder.encode("user123"))
-                    .role(Role.ROLE_USER)
-                    .build());
+            userRepository.save(
+                    User.builder()
+                            .username("user")
+                            .password(passwordEncoder.encode("user123"))
+                            .role(Role.ROLE_USER)
+                            .build());
         }
     }
 }

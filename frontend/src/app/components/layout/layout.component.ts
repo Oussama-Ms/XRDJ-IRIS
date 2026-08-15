@@ -11,20 +11,27 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule, TranslateModule, ChatWidgetComponent],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    CommonModule,
+    TranslateModule,
+    ChatWidgetComponent
+  ],
   templateUrl: './layout.component.html',
   styleUrl: './layout.component.css'
 })
 export class LayoutComponent implements OnInit, OnDestroy {
   authService = inject(AuthService);
   wsService = inject(WebSocketService);
-  
+
   alerts: string[] = [];
   showNotifications = false;
   private sub?: Subscription;
 
   ngOnInit() {
-    this.sub = this.wsService.alerts$.subscribe(msg => {
+    this.sub = this.wsService.alerts$.subscribe((msg) => {
       this.alerts.unshift(msg); // Add to top
     });
   }

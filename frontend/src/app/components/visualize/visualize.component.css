@@ -8,7 +8,9 @@
   background: white;
   border-radius: 12px;
   padding: 24px;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -1px rgba(0, 0, 0, 0.03);
   border: 1px solid #f3f4f6;
   min-width: 0;
   max-width: 100%;
@@ -22,7 +24,7 @@
 h3 {
   margin-top: 0;
   margin-bottom: 20px;
-  color: #004b87;
+  color: #4e3f3a;
   font-size: 1.1em;
   font-weight: 700;
   font-family: 'Montserrat', Tahoma, Geneva, Verdana, sans-serif;
@@ -135,18 +137,18 @@ h3 {
 
 .lang-toggle button {
   background-color: transparent;
-  border: 2px solid #004b87;
+  border: 2px solid #4e3f3a;
   padding: 6px 16px;
   margin-left: 8px;
   cursor: pointer;
   border-radius: 20px;
   font-weight: 700;
   transition: all 0.3s;
-  color: #004b87;
+  color: #4e3f3a;
 }
 
 .lang-toggle button:hover {
-  background-color: #004b87;
+  background-color: #4e3f3a;
   color: white;
 }
 
@@ -159,7 +161,7 @@ h3 {
 
 .export-buttons .export-btn {
   background-color: #ffd700;
-  color: #004b87;
+  color: #4e3f3a;
   border: none;
   padding: 8px 16px;
   margin-left: 10px;
@@ -212,7 +214,7 @@ h3 {
 
 .btn-search {
   background-color: #ffd700;
-  color: #004b87;
+  color: #4e3f3a;
   border: none;
   border-radius: 6px;
   width: 42px;
@@ -243,7 +245,7 @@ h3 {
 
 .btn-pdf {
   background-color: #ffd700;
-  color: #004b87;
+  color: #4e3f3a;
   width: 36px;
   height: 36px;
 }
@@ -294,7 +296,7 @@ h3 {
 
 .page-number {
   font-weight: bold;
-  color: #004b87;
+  color: #4e3f3a;
   background-color: #ffd700;
   padding: 4px 12px;
   border-radius: 4px;

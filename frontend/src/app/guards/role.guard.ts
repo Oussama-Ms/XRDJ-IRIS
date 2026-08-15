@@ -8,10 +8,10 @@ export const roleGuard: CanActivateFn = (route, state) => {
 
   const requiredRole = route.data['role'];
   const userRole = authService.getRole();
-  
+
   if (userRole === requiredRole || userRole === 'ROLE_ADMIN') {
     return true;
   }
-  
+
   return router.parseUrl('/app/visualize');
 };

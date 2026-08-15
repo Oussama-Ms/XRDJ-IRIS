@@ -35,4 +35,8 @@ export class AuthService {
   getRole(): string | null {
     return localStorage.getItem('role');
   }
+
+  getUsername(): string | null {
+    return localStorage.getItem('username');
+  }
 }

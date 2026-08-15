@@ -1,0 +1,95 @@
+<div class="user-management-container">
+  <div class="header-actions">
+    <h2>{{ 'USERS.TITLE' | translate }}</h2>
+    <button class="btn-primary" (click)="openAddModal()">
+      <i class="fa-solid fa-plus"></i>
+      {{ 'USERS.ADD_USER' | translate }}
+    </button>
+  </div>
+
+  <div class="table-container">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ 'USERS.ID' | translate }}</th>
+          <th>{{ 'USERS.USERNAME' | translate }}</th>
+          <th>{{ 'USERS.ROLE' | translate }}</th>
+          <th>{{ 'USERS.ACTIONS' | translate }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.id }}</td>
+          <td>
+            <strong>{{ user.username }}</strong>
+            <span *ngIf="user.username === currentLoggedInUsername" class="badge-you">
+              ({{ 'USERS.YOU' | translate }})
+            </span>
+          </td>
+          <td>
+            <span class="role-badge" [ngClass]="user.role === 'ROLE_ADMIN' ? 'admin' : 'user'">
+              {{ user.role.replace('ROLE_', '') }}
+            </span>
+          </td>
+          <td class="actions-cell">
+            <button
+              class="btn-icon edit"
+              (click)="openEditModal(user)"
+              title="{{ 'USERS.EDIT' | translate }}"
+            >
+              <i class="fa-solid fa-pen"></i>
+            </button>
+            <button
+              class="btn-icon delete"
+              (click)="deleteUser(user)"
+              [disabled]="user.username === currentLoggedInUsername"
+              title="{{ 'USERS.DELETE' | translate }}"
+            >
+              <i class="fa-solid fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-overlay" *ngIf="showModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>{{ isEditMode ? ('USERS.EDIT_USER' | translate) : ('USERS.ADD_USER' | translate) }}</h3>
+        <button class="close-btn" (click)="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form-group">
+          <label>{{ 'USERS.USERNAME' | translate }}</label>
+          <input type="text" [(ngModel)]="currentUser.username" class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label>
+            {{ 'USERS.PASSWORD' | translate }}
+            <span *ngIf="isEditMode" class="hint">({{ 'USERS.PASSWORD_HINT' | translate }})</span>
+          </label>
+          <input type="password" [(ngModel)]="currentUser.password" class="form-control" />
+        </div>
+
+        <div class="form-group">
+          <label>{{ 'USERS.ROLE' | translate }}</label>
+          <select [(ngModel)]="currentUser.role" class="form-control">
+            <option value="ROLE_USER">User</option>
+            <option value="ROLE_ADMIN">Admin</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" (click)="closeModal()">
+          {{ 'USERS.CANCEL' | translate }}
+        </button>
+        <button class="btn-primary" (click)="saveUser()">{{ 'USERS.SAVE' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>
