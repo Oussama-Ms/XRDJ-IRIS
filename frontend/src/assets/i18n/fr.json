@@ -3,7 +3,7 @@
     "TITLE": "Tableau de Bord Utilisateur - Opérations",
     "MACRO_TABLE": "Tableau de Suivi Macro",
     "TREATMENT_HISTORY": "Historique des traitements",
-    "REJECTS_TRACKING": "Répartition par type de flux",
+    "REJECTS_TRACKING": "Suivi des rejets par Flux",
     "EXPORT_CSV": "Exporter CSV",
     "EXPORT_PDF": "Exporter PDF",
     "START_DATE": "DATE DE DÉBUT",
