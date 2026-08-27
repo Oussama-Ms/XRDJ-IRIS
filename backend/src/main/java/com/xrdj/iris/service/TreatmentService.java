@@ -234,8 +234,4 @@ public class TreatmentService {
         anomalyRecordRepository.deleteAll();
         fileArchiveRepository.deleteAll();
     }
-
-    public void reprocessTreatment(String id) {
-        // Not implemented for DB right now
-    }
 }

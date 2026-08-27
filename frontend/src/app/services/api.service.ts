@@ -37,8 +37,4 @@ export class ApiService {
   clearData(): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/admin/clear-data`);
   }
-
-  reprocessTreatment(id: string): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/admin/reprocess/${id}`, {});
-  }
 }

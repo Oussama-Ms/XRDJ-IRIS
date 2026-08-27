@@ -29,8 +29,4 @@ public class AdminController {
         treatmentService.clearAllData();
     }
 
-    @PostMapping("/reprocess/{id}")
-    public void reprocessTreatment(@PathVariable String id) {
-        treatmentService.reprocessTreatment(id);
-    }
 }
